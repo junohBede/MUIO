@@ -234,6 +234,7 @@ export default class RS {
         let pasteEvent = false;
         $divGrid.bind('keydown', function (event) {
             pasteEvent = false;
+            let integerFlag =  true;
             var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
@@ -247,7 +248,17 @@ export default class RS {
                         chunk['StgId'] = stg.StgId;
                         chunk['Stg'] = stg.Stg;
                         $.each(gridData, function (id, rtDataObj) {
-                            chunk[rtDataObj.ScId] = rtDataObj[stg.StgId];
+                            //chunk[rtDataObj.ScId] = rtDataObj[stg.StgId];
+
+                            //provjeriti da li je integer  
+                            if(!Number.isInteger(rtDataObj[stg.StgId]) && rtDataObj[stg.StgId] != null ){
+                                integerFlag = false;
+                                rtDataObj[stg.StgId] = Math.ceil(rtDataObj[stg.StgId]);
+                                chunk[rtDataObj.ScId] = rtDataObj[stg.StgId];
+                            }
+                            else{
+                                chunk[rtDataObj.ScId] = rtDataObj[stg.StgId];
+                            }
                         });
                         chartData.push(chunk);
                         model.chartData[param] = chartData;
@@ -257,6 +268,9 @@ export default class RS {
                     var configChart = $divChart.jqxChart('getInstance');
                     configChart.source.records = model.chartData[param];
                     configChart.update();
+                    if(!integerFlag){
+                        Message.bigBoxWarning('WARNING', "Some of the values were not integer, they are rounded to higher number.", 3000)
+                    }
                 }, 1000);
             }
         }).on('cellvaluechanged', function (event) {

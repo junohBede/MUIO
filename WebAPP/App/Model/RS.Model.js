@@ -4,8 +4,9 @@ import { GROUPNAMES } from "../../Classes/Const.Class.js";
 export class Model {
 
     constructor(casename, genData, RSdata, group, PARAMETERS, param) {
-        this.d = 3;
-        this.decimal = 'd' + this.d;
+        this.d = 0;
+        //this.decimal = 'd' + this.d;
+        this.decimal = "n0";
 
         if (casename) {
 

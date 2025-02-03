@@ -253,7 +253,7 @@ s.t. S11_and_S12_StorageLevelDayTypeStart{r in REGION, s in STORAGE, ls in SEASO
     then StorageLevelSeasonStart[r,s,ls,y]
     else StorageLevelDayTypeStart[r,s,ls,ld-1,y] + sum{lh in DAILYTIMEBRACKET} (((sum{(m,t) in MODExTECHNOLOGYperSTORAGEto[s], l in TIMESLICEofSDB[ls,ld-1,lh]} RateOfActivity[r,l,t,m,y] * TechnologyToStorage[r,t,s,m]) - (sum{(m,t) in MODExTECHNOLOGYperSTORAGEfrom[s], l in TIMESLICEofSDB[ls,ld-1,lh]} RateOfActivity[r,l,t,m,y] * TechnologyFromStorage[r,t,s,m])) * DaySplit[lh,y]) * DaysInDayType[ls,ld-1,y]
     = StorageLevelDayTypeStart[r,s,ls,ld,y];
-s.t. S30_StorageLevelYearStart2{r in REGION, s in STORAGE, y in YEAR,l in TIMESLICE}:	StorageLevelYearStart[r,s,y]  = 0;
+s.t. S30_StorageLevelYearStart2{r in REGION, s in STORAGE, y in YEAR,l in TIMESLICE}:	StorageLevelYearStart[r,s,y]  = 0.5*AccumulatedNewStorageCapacity[r,s,y];
 s.t. S39_StorageIntraday{r in REGION, s in STORAGEINTRADAY, ls in SEASON, ld in DAYTYPE, y in YEAR}: sum{lh in DAILYTIMEBRACKET} (NetChargeWithinDay[r,s,ls,ld,lh,y])=0;
 s.t. S39_StorageIntrayear{r in REGION, s in STORAGEINTRAYEAR, y in YEAR}: sum{ls in SEASON, ld in DAYTYPE, lh in DAILYTIMEBRACKET} (NetChargeWithinYear[r,s,ls,ld,lh,y])=0;
 #

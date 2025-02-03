@@ -231,15 +231,22 @@ export default class RT {
             Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
         });
 
+
+
+
         let pasteEvent = false;
+        let integerFlag = true;
         $divGrid.bind('keydown', function (event) {
             pasteEvent = false;
+    
             var ctrlDown = false, ctrlKey = 17, cmdKey = 91, vKey = 86, cKey = 67;
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
                 pasteEvent = true;
+
                 setTimeout(function () {
                     let gridData = $divGrid.jqxGrid('getboundrows');
+                    console.log('gidData ', gridData)
                     let param = $("#osy-ryt").val();
                     let chartData = [];
                     $.each(model.techs, function (id, tech) {
@@ -247,16 +254,31 @@ export default class RT {
                         chunk['TechId'] = tech.TechId;
                         chunk['Tech'] = tech.Tech;
                         $.each(gridData, function (id, rtDataObj) {
-                            chunk[rtDataObj.ScId] = rtDataObj[tech.TechId];
+                            //provjeriti da li je integer  
+                            if(!Number.isInteger(rtDataObj[tech.TechId]) && rtDataObj[tech.TechId] != null ){
+                                console.log('rtDataObj[tech.TechId] ', rtDataObj[tech.TechId])
+                                integerFlag = false;
+                                rtDataObj[tech.TechId] = Math.ceil(rtDataObj[tech.TechId]);
+                                chunk[rtDataObj.ScId] = rtDataObj[tech.TechId];
+                            }
+                            else{
+                                chunk[rtDataObj.ScId] = rtDataObj[tech.TechId];
+                            }
+
+                            
                         });
                         chartData.push(chunk);
                         model.chartData[param] = chartData;
                     });
                     model.gridData[param] = gridData;
-
+                    $divGrid.jqxGrid('updatebounddata');
                     var configChart = $divChart.jqxChart('getInstance');
                     configChart.source.records = model.chartData[param];
                     configChart.update();
+                    if(!integerFlag){
+                        Message.bigBoxWarning('WARNING', "Some of the values were not integer, they are rounded to higher number.", 3000)
+                    }
+                    
                 }, 1000);
             }
         }).on('cellvaluechanged', function (event) {
@@ -348,23 +370,23 @@ export default class RT {
             $divGrid.jqxGrid('exportdata', 'xls', 'RT');
         });
 
-        $("#decUp").off('click');
-        $("#decUp").on('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            model.d++;
-            model.decimal = 'd' + parseInt(model.d);
-            $divGrid.jqxGrid('refresh');
-        });
+        // $("#decUp").off('click');
+        // $("#decUp").on('click', function (e) {
+        //     e.preventDefault();
+        //     e.stopImmediatePropagation();
+        //     model.d++;
+        //     model.decimal = 'd' + parseInt(model.d);
+        //     $divGrid.jqxGrid('refresh');
+        // });
 
-        $("#decDown").off('click');
-        $("#decDown").on('click', function (e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            model.d--;
-            model.decimal = 'd' + parseInt(model.d);
-            $divGrid.jqxGrid('refresh');
-        });
+        // $("#decDown").off('click');
+        // $("#decDown").on('click', function (e) {
+        //     e.preventDefault();
+        //     e.stopImmediatePropagation();
+        //     model.d--;
+        //     model.decimal = 'd' + parseInt(model.d);
+        //     $divGrid.jqxGrid('refresh');
+        // });
 
         $("#showLog").click(function (e) {
             e.preventDefault();

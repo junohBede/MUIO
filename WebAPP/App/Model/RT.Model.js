@@ -4,8 +4,9 @@ import { GROUPNAMES } from "../../Classes/Const.Class.js";
 export class Model {
 
     constructor(casename, genData, RTdata, group, PARAMETERS, param) {
-        this.d = 3;
-        this.decimal = 'd' + this.d;
+        this.d = 0;
+        // this.decimal = 'd' + this.d;
+        this.decimal = 'n0';
 
         if (casename) {
 
@@ -52,12 +53,18 @@ export class Model {
             datafields.push({ name: 'ScDesc', type: 'string' });
 
             let validation = function (cell, value) {
+                console.log(value, this.param)
                 if (['TMPAL', 'TMPAU'].includes(this.param)){
                     return true;
                 }else{
+                    console.log('Number.isInteger(value) ', value,  Number.isInteger(value))
                     if (value < 0) {
                         return { result: false, message: 'Value must be positive!' };
-                    } else {
+                    } 
+                    else if(!Number.isInteger(value)){
+                        return { result: false, message: 'Operation life cannot be decimal number!' };
+                    }
+                    else {
                         return true;
                     }
                 }
@@ -78,7 +85,7 @@ export class Model {
                     //     console.log('formattedValue ', formattedValue)
                     // }
 
-                    return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
+                    return '<span style="margin: 4px; float:right; ">' + value + '</span>';
                 }
 
             }.bind(this);
@@ -87,6 +94,7 @@ export class Model {
                 var scId = $('#osy-gridRT').jqxGrid('getcellvalue', row, 'ScId');
                 if (scId !== 'SC_0') {
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: true, allowNull: true }); 
+                    //editor.jqxNumberInput({ spinButtons: true, allowNull: true }); 
                     $('#' + editor[0].id + ' input').keydown(function (event) {
                         if (event.keyCode === 46 || event.keyCode === 8) {
                             $('#' + editor[0].id).val(null);
@@ -94,6 +102,7 @@ export class Model {
                     })
                 }else{
                     editor.jqxNumberInput({ decimalDigits: this.d, spinButtons: false, allowNull: false }); 
+                    //editor.jqxNumberInput({  spinButtons: false, allowNull: false }); 
                     editor.val(cellvalue);
                 }
 

@@ -262,25 +262,15 @@ export class DataModelResult{
                             let rule = paramById[group][param]['unitRule'];
                             if(techData[obj.Tech].TG.length != 0){
                                 $.each(techData[obj.Tech].TG, function (id, tg) {
-                                    //console.log('tsec hada ', tg, techGroupData[tg])
-                                    // let tmp = {};
-                                    // tmp = JSON.parse(JSON.stringify(chunk));
-                                    // tmp['Tech'] = obj.Tech;  
-                                    // tmp['TechGroup'] = techGroupNames[tg];
-                                    // tmp['TechDesc'] = techData[obj.Tech]["Desc"];
-                                    // tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
-                                    // dataT = unitData[group][param][obj.Tech];
-                                    // tmp['Unit'] = jsonLogic.apply(rule, {...dataT});
-                                    // pivotData.push(tmp);
-
-
-                                    chunk['Tech'] = obj.Tech;  
-                                    chunk['TechGroup'] = techGroupNames[tg];
-                                    chunk['TechDesc'] = techData[obj.Tech]["Desc"];
-                                    chunk['TechGroupDesc'] = techGroupData[tg]["Desc"];
+                                    let tmp = {};
+                                    tmp = JSON.parse(JSON.stringify(chunk));
+                                    tmp['Tech'] = obj.Tech;  
+                                    tmp['TechGroup'] = techGroupNames[tg];
+                                    tmp['TechDesc'] = techData[obj.Tech]["Desc"];
+                                    tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
                                     dataT = unitData[group][param][obj.Tech];
-                                    chunk['Unit'] = jsonLogic.apply(rule, {...dataT});
-                                    pivotData.push(chunk);
+                                    tmp['Unit'] = jsonLogic.apply(rule, {...dataT});
+                                    pivotData.push(tmp);
                                 })
                             }else{
                                 chunk['Tech'] = obj.Tech;  
