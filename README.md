@@ -1,3 +1,7 @@
+![License](https://img.shields.io/github/license/OSeMOSYS/MUIO)
+![Version](https://img.shields.io/github/v/release/OSeMOSYS/MUIO)
+![GitHub all releases](https://img.shields.io/github/downloads/OSeMOSYS/MUIO/total)
+
 # OSeMOSYS user interface is open source web/standalone web app for creating model solution with OSeMOSYS
 OSeMOSYS is an open source modelling system for long-run integrated assessment and energy planning.
 WebApp javascript
