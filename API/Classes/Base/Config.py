@@ -184,7 +184,11 @@ VARIABLES_C = {
         'CapitalInvestmentStorage':['r','s','y'],
         'DiscountedCapitalInvestmentStorage':['r','s','y'],
         'DiscountedSalvageValueStorage':['r','s','y'],
-        'TotalDiscountedStorageCost':['r','s','y']
+        'TotalDiscountedStorageCost':['r','s','y'],
+        'EBb4_EnergyBalanceEachYear4_ICR': ['r','f','y'],
+        'E8_AnnualEmissionsLimit': ['r','e','y'],
+        'UDC1_UserDefinedConstraintInequality': ['r','cn','y'],
+        'UDC2_UserDefinedConstraintEquality': ['r','cn','y']
     }
 
 #needed for validation of inputs
@@ -229,6 +233,7 @@ PARAMETERS_C_full = {
         'TotalTechnologyModelPeriodActivityUpperLimit': ['r','t','TotalTechnologyModelPeriodActivityUpperLimit'],
         'CapacityFactor': ['r','t', 'y', 'l','CapacityFactor'],
         'YearSplit': ['r','y', 'l','YearSplit'],
-        'SpecifiedDemandProfile': ['r','f','y','l','SpecifiedDemandProfile']
+        'SpecifiedDemandProfile': ['r','f','y','l','SpecifiedDemandProfile'],
+        'ResidualStorageCapacity': ['r','s','y','ResidualStorageCapacity'],
     }
 

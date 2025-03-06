@@ -1068,7 +1068,7 @@ class DataFile(Osemosys):
                                 timeslice = line.split(' ')[0]
                                 for i, year in enumerate(years):
                                     data[param_current].append(tuple([region, year, timeslice, values[i]]))
-                            if param_current in ('TotalAnnualMaxCapacityInvestment','TotalAnnualMinCapacityInvestment','TotalTechnologyAnnualActivityUpperLimit', 'TotalTechnologyAnnualActivityLowerLimit', 'TotalAnnualMaxCapacity', 'ResidualCapacity', 'AvailabilityFactor'):
+                            if param_current in ('TotalAnnualMaxCapacityInvestment','TotalAnnualMinCapacityInvestment','TotalTechnologyAnnualActivityUpperLimit', 'TotalTechnologyAnnualActivityLowerLimit', 'TotalAnnualMaxCapacity', 'ResidualCapacity', 'AvailabilityFactor', 'ResidualStorageCapacity'):
                                 tech = line.split(' ')[0]
                                 for i, year in enumerate(years):
                                     data[param_current].append(tuple([region, tech, year, values[i]]))   
@@ -1092,7 +1092,8 @@ class DataFile(Osemosys):
                         'param CapacityFactor',
                         'param YearSplit',
                         'param SpecifiedDemandProfile',
-                        'param OperationalLife'
+                        'param OperationalLife',
+                        'param ResidualStorageCapacity'
                         )):
                         
                         param_current = line.split(' ')[1]
@@ -2037,7 +2038,7 @@ class DataFile(Osemosys):
                 #     proc.kill()
                 #     outs, errs = proc.communicate()
 
-                cbc_out = subprocess.run('cbc ' + lpfile +' solve -printing 1  -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                cbc_out = subprocess.run('cbc ' + lpfile +' solve -printing all -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
 
 
                 print("SOLUTION DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
@@ -2206,12 +2207,39 @@ class DataFile(Osemosys):
             #parsanje result.txt
             params = []
             
+            # Read only the header row
+            # header_df = pd.read_csv(results_file, sep='\t', nrows=0)
+            # headers = header_df.columns.tolist()
+            # print(headers)
+
             df = pd.read_csv(results_file, sep='\t')
+            # get optimal value
+            # Extract the optimal value from the header line
+            optimal_value_header = df.columns[0]
+            if 'Optimal - objective value' in optimal_value_header:
+                # Extract the value from the header line
+                optimal_value = float(optimal_value_header.split()[-1])
+
+            print('optimal_value ',optimal_value)
+
+            ov = {
+            "r": ['RE1'],
+            "ObjectiveValue": [optimal_value]
+            }
+
+            #load data into a DataFrame object:
+            dfOV = pd.DataFrame(ov)
+
+            print(dfOV) 
+            dfOV.to_csv(os.path.join(base_folder, 'csv', 'ObjectiveValue.csv'), index=None)
+                                                       
             df.columns = ['temp']
+            print(df.head())
 
             df['temp'] = df['temp'].str.lstrip(' *\n\t')
             
             if len(df) > 0:
+                #ovdje parsa result.txt file
                 df[['temp','value']] = df['temp'].str.split(')', expand=True)
                 df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
                 #error when moved to ython 3.11, Columns must have smae length as key
@@ -2222,32 +2250,55 @@ class DataFile(Osemosys):
                 df = df.drop('temp', axis=1)
                 df['value'] = df['value'].astype(float).round(4)
 
-                #variables that are output form solver 18
+                #variables that are output form solver 19
                 params = df.parameter.unique()
                 all_params = {}
 
                 for each in params:
-                    result_cols = []
+                    if each in Config.VARIABLES_C:
+                        result_cols = []
 
-                    # radi problem izmjena da dataframe bez copije 20240118 vk
-                    # df_p = df[df.parameter == each]
-                    # df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
+                        # radi problem izmjena da dataframe bez copije 20240118 vk
+                        # df_p = df[df.parameter == each]
+                        # df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
 
-                    df_p = df[df.parameter == each].copy()
-                    df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
+                        df_p = df[df.parameter == each].copy()
+                        df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
 
-                    result_cols = Config.VARIABLES_C[each].copy()
-                    result_cols.append('value')
-                    #result_cols.append(each)
-                    df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
-                    all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
+                        result_cols = Config.VARIABLES_C[each].copy()
+                        result_cols.append('value')
+                        #result_cols.append(each)
+                        df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
+                        all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
 
-                    #napravi csv
-                    all_params[each] = all_params[each].rename(columns={'value':each})
-                    all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
+                        #napravi csv
+                        all_params[each] = all_params[each].rename(columns={'value':each})
+                        all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
 
                 ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
                 ################################################################################################################
+                if 'AccumulatedNewStorageCapacity' in all_params:
+                    df_ANSC = all_params['AccumulatedNewStorageCapacity'].rename(columns={'value':'AccumulatedNewStorageCapacity'})
+                    df_RSC = pd.DataFrame(data['ResidualStorageCapacity'], columns=Config.PARAMETERS_C_full['ResidualStorageCapacity'])
+                    df_RSC['ResidualStorageCapacity'] = df_RSC['ResidualStorageCapacity'].astype(float)
+
+                    # print('AccumulatedNewStorageCapacity')
+                    # print(df_ANSC.head())
+                    # print('ResidualStorageCapacity')
+                    # print(df_RSC.head())
+
+                    df_TSC_tmp =  pd.merge(df_ANSC, df_RSC, on=['y', 's'] ,  how='outer')
+                    df_TSC_tmp['ResidualStorageCapacity'] = df_TSC_tmp['ResidualStorageCapacity'].fillna(0)
+                    df_TSC_tmp['TotalStorageCapacity'] = df_TSC_tmp['AccumulatedNewStorageCapacity'] + df_TSC_tmp['ResidualStorageCapacity']
+                    df_TSC_tmp.sort_values(['s','y'], inplace=True)
+                    
+                    # print('TotalStorageCapacity')
+                    # print(df_TSC_tmp.head())
+
+                    df_TSC = df_TSC_tmp[['s','y','TotalStorageCapacity']]
+                    df_TSC = df_TSC[df_TSC['TotalStorageCapacity']!=0]
+                    df_TSC.to_csv(os.path.join(base_folder, 'csv', 'TotalStorageCapacity.csv'), index=None)
+            
 
                 if 'RateOfActivity' in all_params:
                     #year split data frame
@@ -2422,7 +2473,7 @@ class DataFile(Osemosys):
                                 if paramobj['group'] == 'R':
                                     tmp = {}
                                     for obj in jsondata:
-                                        tmp[ obj['t']] =obj[param]
+                                        tmp['ObjectiveValue'] = obj[param]
                                     viewData[paramobj['id']][caserunname].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                     File.writeFile( viewData, path)
@@ -2451,6 +2502,40 @@ class DataFile(Osemosys):
                                     viewData[paramobj['id']][caserunname].append(tmp)
                                     path = Path(self.viewFolderPath, paramobj['group']+'.json')
                                     File.writeFile( viewData, path)  
+
+                                if paramobj['group'] == 'RYCn':
+                                    con = jsondata[0]['cn']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if con == obj['cn']:
+                                            tmp['Con'] = obj['cn']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            con = obj['cn']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Con'] = obj['cn']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path)  
+
+                                if paramobj['group'] == 'RYC':
+                                    comm = jsondata[0]['f']
+                                    tmp = {}
+                                    for obj in jsondata:
+                                        if comm == obj['f']:
+                                            tmp['Comm'] = obj['f']
+                                            tmp[obj['y']] = obj[param]
+                                        else:
+                                            comm = obj['f']
+                                            viewData[paramobj['id']][caserunname].append(tmp)
+                                            tmp = {}
+                                            tmp['Comm'] = obj['f']
+                                            tmp[obj['y']] = obj[param]
+                                    viewData[paramobj['id']][caserunname].append(tmp)
+                                    path = Path(self.viewFolderPath, paramobj['group']+'.json')
+                                    File.writeFile( viewData, path) 
 
                                 if paramobj['group'] == 'RYE':
                                     emi = jsondata[0]['e']

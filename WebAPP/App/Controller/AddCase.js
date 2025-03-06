@@ -96,7 +96,7 @@ export default class AddCase {
     }
 
     static initEvents(model) {
-        //console.log('model ', model)
+        console.log('model ', model)
         let $divTech = $("#osy-gridTech");
         let $divTechGroup = $("#osy-gridTechGroup");
         let $divStg = $("#osy-gridStg");
@@ -301,12 +301,12 @@ export default class AddCase {
             let defaultTech = DefaultObj.defaultTech();
             //tech grid se pravi dinalicki potrebno je updatovati model
             //JSON parse strungify potrebno da iz nekog razloga izbacino elemente uid boundindex...
-            model.techs.push(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'TG', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'])));
+            model.techs.unshift(JSON.parse(JSON.stringify(defaultTech[0], ['TechId', 'Tech', 'Desc', 'CapUnitId', 'ActUnitId', 'TG', 'IAR', 'OAR', "INCR", "ITCR", 'EAR'])));
             //model.techs.push(defaultTech[0]);
             //update technames
             model.techNames[defaultTech[0]['TechId']] = defaultTech[0]['Tech'];
             //add row in grid
-            $divTech.jqxGrid('addrow', null, defaultTech);
+            $divTech.jqxGrid('addrow', null, defaultTech, 'first');
             //upat eza broj techs u tabu
             model.techCount++;
             $("#techCount").text(model.techCount);
@@ -318,29 +318,31 @@ export default class AddCase {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            console.log('id ', id)
-            
-            if (id != 0) {
-                var rows = $divTech.jqxGrid('getboundrows');
+            var htmltechId = $(this).attr('data-techId');            
+            if (model.techs.length > 1 && $divTech.jqxGrid('getrows').length>1)  {
                 var techId = $divTech.jqxGrid('getcellvalue', id, 'TechId');
-                console.log('techId ', techId)
-                console.log('tech name', model.techNames[techId])
                 //ovdje moramo korisit id ne rowID koji ostaje nepromjenjen nakon brisanja
+                //id je index koji se mijnje ako brisemo ili dodajemo na pocetak tabele ili niza
+                //sortingn ne utice na rowid i id i index
                 var rowid = $divTech.jqxGrid('getrowid', id);
-                //var rowid = id;
 
-
-                console.log('rowid ', rowid)
-
-                // console.log('rows[rowId].uid ', rows[rowid].uid);
-                // console.log('rows[id]].uid ', rows[id].uid);
-                console.log('model.techs ',model.techs)
-                console.log('rows ', rows)
-                //console.log('model.techs rowid ',model.techs[rowid])
-                console.log('model.techs TECH ',model.techs[id].Tech)
+                console.log('rowid id ', rowid,id)
+                //var rows = $divTech.jqxGrid('getboundrows');
+                // // console.log('rows[rowId].uid ', rows[rowid].uid);
+                // // console.log('rows[id]].uid ', rows[id].uid);
+                // console.log('model.techs ',model.techs)
+                // console.log('rows ', rows)
+                // //console.log('model.techs rowid ',model.techs[rowid])
+                // console.log('model.techs TECH ',model.techs[id].Tech)
                 // console.log("TG ", model.techs[rowid].TG.length)
 
 
+                //provjera da brisemo tacnu tehnologiju
+                //console.log('techIds ', model.techs[id].TechId,techId, htmltechId,    model.techNames[techId],   model.techNames[model.techs[id].TechId],    model.techNames[htmltechId])
+                if(model.techs[id].TechId != techId ||techId != htmltechId){
+                    console.log('delete tech')  
+                    Message.bigBoxDanger('Technology deletion error', `Wrong index!! <b>${model.techs[id].Tech}</b>?`, 3000);
+                }
                 if(model.techs[id].TG.length>0){          
                     Message.confirmationDialog('Technology deletion warning', `Technology <b>${model.techs[id].Tech}</b> has technology group membership(s). Deleting the technology could impact visalisation of results for previously run cases. Are you sure you want to proceed?`, model, $divTech, id, rowid, techId)
                 }
@@ -358,6 +360,9 @@ export default class AddCase {
                         conObj['CM'] = conObj['CM'].filter(item => item !== techId);
                     });
                 }
+            }
+            else {
+                Message.bigBoxWarning('Warning', 'You cannot delete. At least one technology is neccessary.', 3000);
             }
         });
 
@@ -481,6 +486,7 @@ export default class AddCase {
 
         $divTs.on('cellvaluechanged', function (event) {
             var args = event.args;
+            //console.log('arsg ', args)  
             var column = event.args.datafield;
             var rowBoundIndex = args.rowindex;
             var value = args.newvalue.trim();
@@ -768,12 +774,12 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultComm = DefaultObj.defaultComm();
-            model.commodities.push(JSON.parse(JSON.stringify(defaultComm[0], ['CommId', 'Comm', 'Desc', 'UnitId'])));
+            model.commodities.unshift(JSON.parse(JSON.stringify(defaultComm[0], ['CommId', 'Comm', 'Desc', 'UnitId'])));
 
             //update commnames
             model.commNames[defaultComm[0]['CommId']] = defaultComm[0]['Comm'];
             //add row
-            $divComm.jqxGrid('addrow', null, defaultComm);
+            $divComm.jqxGrid('addrow', null, defaultComm, 'first');
             model.commCount++;
             $("#commCount").text(model.commCount);
         });
@@ -783,9 +789,17 @@ export default class AddCase {
             e.preventDefault();
             e.stopImmediatePropagation();
             var id = $(this).attr('data-id');
-            if (id != 0) {
+            var htmlcommId = $(this).attr('data-commId');  
+            if (model.commodities.length > 1 && $divComm.jqxGrid('getrows').length>1)  {
                 var commId = $divComm.jqxGrid('getcellvalue', id, 'CommId');
                 var rowid = $divComm.jqxGrid('getrowid', id);
+
+                //provjera da brisemo tacan commoditu
+                if(model.commodities[id].CommId != commId ||commId != htmlcommId){ 
+                    Message.bigBoxDanger('Commodity deletion error', `Wrong index!! <b>${model.comms[id].CommId}</b>?`, 3000);
+                    return false;
+                }
+
                 $divComm.jqxGrid('deleterow', rowid);
                 model.commodities.splice(id, 1);
                 //update techNames
@@ -801,6 +815,9 @@ export default class AddCase {
                     techObj['INCR'] = techObj['INCR'].filter(item => item !== commId);
                     techObj['ITCR'] = techObj['ITCR'].filter(item => item !== commId);
                 });
+            }
+            else{
+                Message.bigBoxWarning('Warning', 'You cannot delete. At least one commodity is neccessary.', 3000);
             }
         });
 
@@ -1049,7 +1066,7 @@ export default class AddCase {
         $(".nav-tabs li a").off('click');
         $('.nav-tabs li a').on("click", function (event, ui) {
             var id = $(this).attr('id');
-            console.log('tab id ', id)
+            // console.log('tab id ', id)
             //update tech grid to update IAR OAR EAR with new added or removed comms and emis
             if (id == 'Techs') {
                 //Grid.techsGrid(model.techs, model.commodities, model.emissions, model.commNames, model.emiNames);

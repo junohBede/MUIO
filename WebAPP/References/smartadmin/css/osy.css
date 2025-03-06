@@ -207,7 +207,13 @@ label.select {
 } */
 
 .smart-form .checkbox input+i:after {
-    color: var(--main-lighter-color)!important;
+    /* color: var(--main-lighter-color)!important; */
+    color: whitesmoke!important;
+    
+}
+
+.jqx-widget-content-bootstrap {
+    z-index: 99;
 }
 
 .irs-bar {
@@ -235,6 +241,7 @@ label.select {
 .smart-form .checkbox input:checked+i,
  .smart-form .radio input:checked+i, .smart-form .toggle input:checked+i {
      border-color:  var(--main-lighter-color)!important;
+     background-color: var(--second-color)!important;
 }
 
 
@@ -344,18 +351,18 @@ label.select {
     }
     #osy-scOrder  div{
         border-radius: 5px;
-        padding: 4px;
+        padding: 10px;
         cursor: pointer;
         background-color: white;
-        color: black;
-        border: 1px solid transparent;
+        color: var(--main-color)!important;;
+        border: 1px groove #d9d9d9!important;
     }
     #osy-sc0 div{
         border-radius: 5px;
-        padding: 4px;
+        padding: 10px;
         cursor: pointer;
         background-color: white;
-        color: black;
+        color: var(--main-color)!important;
         border: 1px solid transparent;
     }
     #osy-scOrder div:hover {
@@ -624,7 +631,7 @@ li {
 }
 .dropdown-menu {
     min-width: 320px!important;
-    z-index: 9000!important;
+    z-index: 10000!important;
     padding: 20px!important;
 }
 
@@ -842,4 +849,62 @@ li {
 
 .tabs-left>.tab-content {
     margin-left: 195px!important;
+}
+
+.btn {
+    padding: 6px 12px !important;
+}
+
+.jqx-tree-material .jqx-checkbox-material .jqx-checkbox-default-material, .jqx-checkbox-material[checked] .jqx-checkbox-default-material, .jqx-tree-grid-checkbox[checked].jqx-checkbox-default-material, .jqx-radiobutton-material[checked] .jqx-radiobutton-default-material {
+    background-color: var(--second-color)!important;
+    border-color: var(--main-color)!important;
+}
+
+
+
+.jqx-listitem-state-selected-material, .jqx-menu-item-selected-material, .jqx-tree-item-selected-material, .jqx-calendar-cell-selected-material, .jqx-grid-cell-selected-material, .jqx-menu-vertical-material .jqx-menu-item-top-selected-material, .jqx-grid-selectionarea-material, .jqx-input-button-header-material, .jqx-input-button-innerHeader-material {
+    color: whitesmoke!important;
+    background-color: var(--second-color) !important;
+}
+.jqx-dropdownlist-content {
+    color: var(--main-color) !important;
+}
+.jqx-input-label-material {
+    color: var(--main-color) !important;
+}
+
+
+.btn-osy {
+    color: #fff!important;
+    background-color: var(--second-color)!important;
+    border: 1px solid var(--main-color)!important;
+}
+.btn-osy:hover {
+    color: #fff!important;
+    background-color: var(--second-darker-color)!important;
+    border: 1px solid var(--main-color)!important;
+}
+
+.jqx-dropdownlist-state-selected-material, .jqx-combobox-state-selected-material {
+    color: var(--second-color)!important;
+}
+
+
+
+
+
+.select2-container .select2-selection--single {
+    height: 40px;
+    line-height: 40px;
+    border: 2px solid #007bff;
+    border-radius: 0px; /* Remove border-radius */
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow b {
+    border-color: #007bff transparent transparent transparent;
+}
+
+/* Customize the dropdown list */
+.select2-container .select2-dropdown {
+    border-radius: 0px; /* Remove border-radius */
 }

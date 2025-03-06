@@ -246,7 +246,6 @@ export class Message {
                 $.each(model.constraints, function (id, conObj) {
                     conObj['CM'] = conObj['CM'].filter(item => item !== techId);
                 });
-                console.log('MODEL2 ', model)
             }
             if (ButtonPressed === "No") {
                 $.smallBox({

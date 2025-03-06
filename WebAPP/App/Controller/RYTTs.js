@@ -215,41 +215,18 @@ export default class RYTTs {
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
                 pasteEvent = true;
-
                 setTimeout(function () {
                     let gridData = $divGrid.jqxGrid('getboundrows');
                     let param = $("#osy-ryt").val();
-                    let tech = $("#osy-techs").val();
-                    var ts = $("#osy-timeslices1").val();
-
-                    //update grid model
                     model.gridData[param] = gridData;
-
-                    //update chart model
-                    // $.each(model.techs, function (idT, tech) {
-                    //     $.each(model.timeslices, function (idT, ts) {
-                    //         let chartData = [];
-                    //         $.each(model.years, function (idY, year) {
-                    //             let chunk = {};
-                    //             chunk['Year'] = year;
-                    //             $.each(gridData, function (id, obj) {
-                    //                 if (obj.TechId == tech.TechId && obj.Timeslice == ts) {
-                    //                     chunk[obj.ScId] = obj[year];
-                    //                 }
-                    //             });
-                    //             chartData.push(chunk);
-                    //         });
-                    //         model.chartData[param][tech['TechId']][ts] = chartData;
-                    //     });
-                    // });
-                    // var configChart = $divChart.jqxChart('getInstance');
-                    // configChart.source.records = model.chartData[model.param][tech][ts];
-                    // configChart.update();
                 }, 500);
+                
             }
         }).on('cellvaluechanged', function (event) {
             if (!pasteEvent) {
-                Pace.restart();
+                console.log('not paste')
+                //Pace.restart();
+                pasteEvent = false;
                 var args = event.args;
                 var year = event.args.datafield;
                 var rowBoundIndex = args.rowindex;
@@ -258,30 +235,6 @@ export default class RYTTs {
                 var techId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TechId');
                 var tsId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'TsId');
                 var ScId = $divGrid.jqxGrid('getcellvalue', rowBoundIndex, 'ScId');
-
-
-                //////////////CAHRT
-                // let param = $("#osy-ryt").val();
-                // let tech = $("#osy-techs").val();
-                // var ts = $("#osy-timeslices1").val();
-
-
-                //update chart model
-                // $.each(model.chartData[param][techId][timeslice], function (id, obj) {
-                //     if (obj.Year == year) {
-                //         if (value) {
-                //             obj[ScId] = value;
-                //         } else {
-                //             obj[ScId] = 0;
-                //         }
-                //     }
-                // });
-
-                // var configChart = $divChart.jqxChart('getInstance');
-                // configChart.source.records = model.chartData[model.param][tech][ts];
-                // configChart.update();
-                //update chart model
-
                 $.each(model.gridData[model.param], function (id, obj) {
                     if (obj.TechId == techId && obj.TsId == tsId && obj.ScId == ScId) {
                         if (value) {

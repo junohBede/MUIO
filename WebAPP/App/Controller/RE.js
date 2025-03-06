@@ -315,9 +315,38 @@ export default class RE {
             res = !res;        
         });
     
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $divGrid.jqxGrid('exportdata', 'xls', 'RE');
+        // });
+
+        $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'RE');
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Param'].concat(model.emiIds)));
+
+            let dataNames = [];
+            let tmp={};
+            $.each(data[0], function (id, val) { 
+                if (id != "Sc" && id != "Param") {
+                    let emiName = model.emiNames[id];
+                    tmp[emiName] = val;
+                }else{
+                    tmp[id] = val;
+                }
+            });
+            dataNames.push(tmp)
+
+            Base.prepareCSV(model.casename, dataNames)
+            .then(response =>{
+                Message.smallBoxInfo('Model message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#decUp").off('click');

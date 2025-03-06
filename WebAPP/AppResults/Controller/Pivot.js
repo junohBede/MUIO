@@ -76,7 +76,7 @@ export default class Pivot {
                 let model = new Model(casename, genData, resData, VARIABLES, DATA, VIEWS);
                 model.refreshPage = true;
                 this.initPage(model);
-                this.initEvents(model);
+                //this.initEvents(model);
             })
             .catch(error => {
                 console.log('error ', error)
@@ -283,10 +283,36 @@ export default class Pivot {
         }
         ///////////end field formats
 
+
+        //03022025 postavljenje default formata Value grupe u gridu
+        // Access the pivot engine and loop through fields
+        // let decimalpoints = localStorage.getItem("osy-decimalpoints");
+        // if(!decimalpoints){
+        //     decimalpoints = 'n2';
+        // }
+        // console.log('decimalpoints ', decimalpoints)    
+
+        //app.engine.fields.getField('Unit').isContentHtml = true;
+
+        // app.engine.fields.forEach(function (field) {
+        //     //console.log('field ', field)
+        //     if (field.header === 'Value') {
+        //         // Set the format to display numbers with 2 decimal places
+        //         field.format = model.stgDecimalPoints;
+        //     }
+        // });
+
+        //app.engine.valueFields.format =  model.stgDecimalPoints;
+        app.engine.fields.getField('Value').format = model.stgDecimalPoints;
+
+        // Refresh the pivot engine to apply the changes
+        // pivotEngine.refresh();
+
+
         app.pivotGrid = new wijmo.olap.PivotGrid('#pivotGrid', {
             itemsSource: app.engine,
             collapsibleSubtotals: true,
-            showSelectedHeaders: 'All',    
+            showSelectedHeaders: 'All',  
         });
 
         app.pivotChart = new wijmo.olap.PivotChart('#pivotChart', {
@@ -522,19 +548,27 @@ export default class Pivot {
 
         Osemosys.getResultData(model.casename, model.group+'.json')
         .then(DATA => {
-
+            console.log('DATA ', DATA)
             if (DATA !== null && model.param in DATA && Object.getOwnPropertyNames(DATA[model.param]).length != 0){
                 let pivotData = DataModelResult.getPivot(DATA, model.genData, model.VARIABLES, model.group, model.param);
+                console.log('pivotData ', pivotData)
                 model.pivotData = pivotData;
                 app.engine.itemsSource = model.pivotData;
 
-                if (model.param == 'D' || model.param == 'T'){
-                    app.engine.columnFields.push( 'Comm');
+
+                console.log('pivot source ok')
+                if (model.group == 'R'){
+                    app.engine.columnFields.push('Optimal');
+                    app.engine.rowFields.push('Case');
+                    app.engine.valueFields.push('Value');
+                }
+                else if(model.group == 'RYE' ){
+                    app.engine.columnFields.push('Emi');
                     app.engine.rowFields.push('Case','Year');
                     app.engine.valueFields.push('Value');
                 }
-                else if(model.param == 'AE' ){
-                    app.engine.columnFields.push('Emi');
+                else if(model.group == 'RYCn' ){
+                    app.engine.columnFields.push('Con');
                     app.engine.rowFields.push('Case','Year');
                     app.engine.valueFields.push('Value');
                 }
@@ -543,12 +577,41 @@ export default class Pivot {
                     app.engine.rowFields.push('Case','Year');
                     app.engine.valueFields.push('Value');
                 }
+                else if (model.group == 'RYCTs' || model.group == 'RYC'){
+                    app.engine.columnFields.push( 'Comm');
+                    app.engine.rowFields.push('Case','Year');
+                    app.engine.valueFields.push('Value');
+                }
+
+                else if(model.group == "RYTC" || model.group == 'RYTCMTs' ){
+                    console.log(app.engine.columnFields)
+                    app.engine.columnFields.push('Comm');
+                    console.log('com tech added')
+                    app.engine.rowFields.push('Case','Year');
+                    app.engine.valueFields.push('Value');
+                }
                 else{
+                    console.log('else')
                     app.engine.columnFields.push('Tech');
                     app.engine.rowFields.push('Case', 'Year');
                     app.engine.valueFields.push('Value');
                 }
 
+                                //decimal points
+                //console.log('field ', field)
+                // app.engine.fields.forEach(function (field) {
+                //     if (field.header === 'Value') {
+                //         // Set the format to display numbers with 2 decimal places
+                //         field.format = decimalpoints;
+                //     }
+                // });
+
+                console.log('app.engine.valueFields ', app.engine.valueFields, model.stgDecimalPoints)
+                // app.engine.valueFields.format =  model.stgDecimalPoints;
+                // app.engine.refresh();
+                app.engine.fields.getField('Value').format = model.stgDecimalPoints;
+
+                console.log('fields ok')
                 //update defaul model
                 model.DEFAULTVIEW = JSON.parse(JSON.stringify(app.engine.viewDefinition));
                 //model.DEFAULTVIEW = app.engine.viewDefinition;
@@ -566,22 +629,27 @@ export default class Pivot {
                     model.TriggerUpdate = true;
                     Html.title(model.casename, model.VARNAMES[model.group][model.param], model.group+' - Default view');
                 }
+                console.log('view ok')
                 app.engine.fields.getField('Unit').isContentHtml = true;
-                if(model.group != "RYS" && model.group != "RYCTs"){
+                if(model.group != "RYS" && model.group != "RYCTs" && model.group != "RYC" && model.group != "RYE" && model.group != "RYCn"&& model.group != "R"){
                     app.engine.fields.getField('Tech').isContentHtml = true;
                     app.engine.fields.getField('Tech Desc').isContentHtml = true;
                 }
-                if(model.group == "RYTC" || model.group == "RYCTs" || model.group == "RYTCMTs"){
+                if(model.group == "RYTC" || model.group == "RYCTs" || model.group == "RYTCMTs" || model.group == "RYC"){
                     app.engine.fields.getField('Comm').isContentHtml = true;
                     app.engine.fields.getField('Comm Desc').isContentHtml = true;
                 }
-                if(model.group == "RYTE" || model.group == "RYTEM"){
+                if(model.group == "RYTE" || model.group == "RYTEM" || model.group == "RYE"){
                     app.engine.fields.getField('Emi').isContentHtml = true;
                     app.engine.fields.getField('Emi Desc').isContentHtml = true;
                 }
                 if(model.group == "RYS"){
                     app.engine.fields.getField('Stg').isContentHtml = true;
                     app.engine.fields.getField('Stg Desc').isContentHtml = true;
+                }
+                if(model.group == "RYCn"){
+                    app.engine.fields.getField('Con').isContentHtml = true;
+                    app.engine.fields.getField('Con Desc').isContentHtml = true;
                 }
 
                 Message.loaderEnd();

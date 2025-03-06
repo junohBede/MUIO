@@ -105,8 +105,7 @@
 									</a>
 									<ul class="dropdown-menu dropdown-navbar navbar-pink dropdown-menu dropdown-caret dropdown-close">
 										<li class="dropdown-header">
-											<i class="ace-icon fa fa-info-circle fa-lg primary"></i>
-											Manage scenario data
+											<p class="margin-bottom-5"><i class="fa fa-line-chart text-warning"></i> <strong>SCENARIOS:</strong> <i>Handle scenario data</i> <span class="pull-right semi-bold text-muted"></span></p>
 										</li>
 										<div class="btn-group" id='scCommand' style="display: none;">
 											<select id="osy-scenarios" name="osy-scenarios" class="form-control pull-left"></select>
@@ -121,10 +120,16 @@
 										<i class="ace-icon fa fa-arrows-h fa-lg"></i>
 									</button>
 								</div>
-								<div  class="btn-group pull-right">
+								<!-- <div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default" id="xlsAll" data-toggle="tooltip" data-placement="top" title="Exportgrid to excel">
 										<i class="ace-icon fa fa-file-excel-o green fa-lg"></i>
 									</button>
+								</div> -->
+								<div  class="btn-group pull-right">
+									<button type="button" class="btn btn-default" id="xlsAll"  data-toggle="tooltip" data-placement="top" title="Exportgrid to excel">
+										<i class="ace-icon fa fa-file-excel-o green fa-lg"></i>
+									</button>
+									<a href="downloadCSV" id="csvDownload" type="button" class="btn btn-default" style="display: none;"> <span class="glyphicon glyphicon-download-alt text-info icon-btn"></span></a>
 								</div>
 								<div  class="btn-group pull-right">
 									<button type="button" class="btn btn-default" id="decDown" data-toggle="tooltip" data-placement="top" title="Decrease decimal places">

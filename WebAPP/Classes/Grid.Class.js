@@ -9,6 +9,19 @@ export class Grid {
         let theme = "bootstrap";
         return theme
     }
+    static themeMaterial = "material";
+
+    // static scrollToRow($divGrid, rowIndex) {
+    //     var rowHeight = $divGrid.jqxGrid('rowsheight');
+    //     console.log('rowHeight ', rowHeight)
+    //     var gridTopOffset = $divGrid.offset().top;
+    //     var scrollToPosition = gridTopOffset + (rowIndex * rowHeight) -25;
+    //     console.log('gridTopOffset ',gridTopOffset,rowIndex, scrollToPosition)
+    //     //scrollTop: scrollToPosition
+    //     $('html, body').animate({
+    //         scrollTop: scrollToPosition
+    //     }, 100); // Adjust the duration as needed
+    // }
 
     static seGrid(seasons) {
 
@@ -39,7 +52,7 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteSe" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteSe" data-id=' + row + ' ><i class="fa fa-times danger"></i>Delete</span>';
         }
 
         $("#osy-gridSe").jqxGrid({
@@ -93,7 +106,7 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteDt" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteDt" data-id=' + row + ' ><i class="fa fa-times danger"></i>Delete</span>';
         }
 
         $("#osy-gridDt").jqxGrid({
@@ -147,7 +160,7 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteDtb" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteDtb" data-id=' + row + ' ><i class="fa fa-times danger"></i>Delete</span>';
         }
 
         $("#osy-gridDtb").jqxGrid({
@@ -176,11 +189,6 @@ export class Grid {
 
     static tsGrid(timeslices, seasons, daytypes, dailytimebrackets, seNames, dtNames, dtbNames) {
 
-        // console.log('daytypes ', daytypes)
-        // console.log('dailytimebrackets ', dailytimebrackets)
-        // console.log('seasons ', seasons)
-        // console.log('timeslices ', timeslices)
-
         let srcTs = JqxSources.srcTs(timeslices);
         let srcSe = JqxSources.srcSe(seasons);
         let srcDt = JqxSources.srcDt(daytypes);
@@ -203,7 +211,7 @@ export class Grid {
         var ddlSeasons = function (row, value, editor) {
             let data = seasons;
             editor.jqxDropDownList({
-                source: this.daSe, displayMember: 'Se', valueMember: 'SeId',
+                source: this.daSe, displayMember: 'Se', valueMember: 'SeId',theme: this.themeMaterial,filterHeight:30,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -215,7 +223,7 @@ export class Grid {
         var ddlDatypes = function (row, value, editor) {
             let data = daytypes;
             editor.jqxDropDownList({
-                source: this.daDt, displayMember: 'Dt', valueMember: 'DtId', 
+                source: this.daDt, displayMember: 'Dt', valueMember: 'DtId',theme: this.themeMaterial,filterHeight:30, 
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -227,7 +235,7 @@ export class Grid {
         var ddlDilytimebrackets = function (row, value, editor) {
             let data = dailytimebrackets;
             editor.jqxDropDownList({
-                source: this.daDtb, displayMember: 'Dtb', valueMember: 'DtbId', 
+                source: this.daDtb, displayMember: 'Dtb', valueMember: 'DtbId',theme: this.themeMaterial,filterHeight:30, 
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -258,71 +266,26 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTs" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTs" data-id=' + row + ' ><i class="fa fa-times danger"></i>Delete</span>';
         }
 
         var cellsrendererSeasons = function (row, columnfield, value, defaulthtml, columnproperties) {
-            let valueNames = [];
-            if (Array.isArray(value)) {
-                var values = value;
-            } else {
-                var values = value.split(/,\s*/);
-            }
-            $.each(values, function (id, seId) {
-                valueNames.push(seNames[seId])
-            });
-            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${seNames[value]} </div>`;
         }.bind(this);
 
         var cellsrendererDaytypes = function (row, columnfield, value, defaulthtml, columnproperties) {
-            let valueNames = [];
-            if (Array.isArray(value)) {
-                var values = value;
-            } else {
-                var values = value.split(/,\s*/);
-            }
-            $.each(values, function (id, dtId) {
-                valueNames.push(dtNames[dtId])
-            });
-            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${dtNames[value]} </div>`;
         }.bind(this);
 
         var cellsrendererDailytimebrackets = function (row, columnfield, value, defaulthtml, columnproperties) {
-            let valueNames = [];
-            if (Array.isArray(value)) {
-                var values = value;
-            } else {
-                var values = value.split(/,\s*/);
-            }
-            $.each(values, function (id, dtbId) {
-                valueNames.push(dtbNames[dtbId])
-            });
-            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${dtbNames[value]} </div>`;
         }.bind(this);
 
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
-            // set the editor's current value. The callback is called each time the editor is displayed.
-            var items = editor.jqxDropDownList('getItems');
-            // console.log('items ', items)
-            // console.log('editor ', editor)
-            editor.jqxDropDownList('uncheckAll');
-            if (Array.isArray(cellvalue)) {
-                var values = cellvalue;
-            } else {
-                var values = cellvalue.split(/,\s*/);
-            }
-            for (var j = 0; j < values.length; j++) {
-                for (var i = 0; i < items.length; i++) {
-                    if (items[i].value === values[j]) {
-                        editor.jqxDropDownList('checkIndex', i);
-                    }
-                }
-            }
-        }.bind(this)
+            editor.jqxDropDownList('selectItem', cellvalue);
+        };
 
         var getEditorValue = function (row, cellvalue, editor) {
-            console.log(' editor ',editor)
-            console.log(' editor val ',editor.val())
             return editor.val();
         }
 
@@ -337,8 +300,8 @@ export class Grid {
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
-            pageable: true,
-            pagesize: 10,
+            // pageable: true,
+            // pagesize: 10,
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'TsId', datafield: 'TsId', hidden: true },
@@ -347,31 +310,31 @@ export class Grid {
                 { text: 'DtbId', datafield: 'DtbId', hidden: true },
                 { text: 'Year split name', datafield: 'Ts', width: '15%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '30%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Season', datafield: 'SE', width: '15%',cellsrenderer: cellsrendererSeasons, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlSeasons,  align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Day type', datafield: 'DT', width: '15%', cellsrenderer: cellsrendererDaytypes, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDatypes,  align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Daily time', datafield: 'DTB', width: '15%', cellsrenderer: cellsrendererDailytimebrackets, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDilytimebrackets,  align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Season', datafield: 'SE', width: '15%',cellsrenderer: cellsrendererSeasons, initeditor:initeditor, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlSeasons,  align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Day type', datafield: 'DT', width: '15%', cellsrenderer: cellsrendererDaytypes,  initeditor:initeditor,geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDatypes,  align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Daily time', datafield: 'DTB', width: '15%', cellsrenderer: cellsrendererDailytimebrackets,  initeditor:initeditor,geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDilytimebrackets,  align: 'center', cellsalign: 'center', sortable: false },
 
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTs" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add year split</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTs" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add year split</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
     }
 
     static techsGrid(techs, commodities, techGroups, emissions, commNames, emiNames, techGroupNames) {
-
+        ///settings units
+        let UnitsArray = [];
+        let UnitsSettings = JSON.parse(localStorage.getItem("osy-units"));
+        if(UnitsSettings){
+            UnitsArray = UnitsSettings
+        }
+        else{
+            UnitsArray = UNITS;
+        }
+         
         this.srcTechs = JqxSources.srcTech(techs);
         this.srcTechGroups = JqxSources.srcTechGroup(techGroups);
         this.srcComms = JqxSources.srcComm(commodities);
         this.srcEmi = JqxSources.srcEmi(emissions);
-        this.srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
-
-        // console.log('techs ', techs)
-        // console.log('commodities ', commodities)
-        // console.log('techGroups ', techGroups)
-        // console.log('emissions ', emissions)
-        // console.log('commNames ', commNames)
-        // console.log('emiNames ', emiNames)
-        // console.log('techGroupNames ', techGroupNames)
-        // console.log('UNITS ', UNITS)
+        this.srcUnits = JqxSources.srcUnit(JSON.stringify(UnitsArray));
 
         this.daTechs = new $.jqx.dataAdapter(this.srcTechs);
 
@@ -384,18 +347,19 @@ export class Grid {
         this.daEmi = new $.jqx.dataAdapter(this.srcEmi, {
             autoBind: true
         });
-        this.daUnits = new $.jqx.dataAdapter(this.srcUnits);
-
+        this.daUnits = new $.jqx.dataAdapter(this.srcUnits, {
+            autoBind: true
+        });
 
         var ddlUnits = function (row, value, editor) {
-            editor.jqxDropDownList({ source: this.daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true  });
+            editor.jqxDropDownList({ source: this.daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true,theme: this.themeMaterial,filterHeight:30  });
         }.bind(this);
 
         var ddlTechGroups = function (row, value, editor) {
             // let data = this.daComms.records;
             let data = techGroups;
             editor.jqxDropDownList({
-                source: this.daTechGroups, displayMember: 'TechGroup', valueMember: 'TechGroupId', checkboxes: true,
+                source: this.daTechGroups, displayMember: 'TechGroup', valueMember: 'TechGroupId', checkboxes: true,theme: this.themeMaterial,filterHeight:30,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -409,7 +373,7 @@ export class Grid {
             // let data = this.daComms.records;
             let data = commodities;
             editor.jqxDropDownList({
-                source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true,
+                source: this.daComms, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true,theme: this.themeMaterial,filterHeight:30,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -425,7 +389,8 @@ export class Grid {
             // let data = this.daEmi.records;
             let data = emissions;
             editor.jqxDropDownList({
-                source: this.daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true,
+                source: this.daEmi, displayMember: 'Emis', valueMember: 'EmisId', checkboxes: true,theme: this.themeMaterial,filterHeight:30,
+
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -479,19 +444,12 @@ export class Grid {
             return true;
         }
 
-        var validation_2 = function (cell, value) {
-            if (value < 0) {
-                return { result: false, message: "Vlaue should be positive" };
-            } else {
-                return true;
-            }
-        }
-
-        var cellsrendererbutton = function (row, column, value) {
-            if (row == 0) {
-                return '';
-            }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTech" data-id=' + row + '><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+        var deleteBtnRender = function (row, column, value) {
+            //console.log(row, column, value)
+            // if (row == 0) {
+            //     return '';
+            // }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTech" data-techId='+value+' data-id='+row+'><i class="fa  fa-times danger"></i>Delete</span>';
         }
 
         var cellsrendererTechGroups = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -523,10 +481,6 @@ export class Grid {
             return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
         }.bind(this);
 
-        var columnsrenderer = function (value) {
-            return '<div style="text-align: center; margin-top: 12px; word-wrap:normal;white-space:normal;">' + value + '</div>';
-        }
-
         var cellsrendererEmis = function (row, columnfield, value, defaulthtml, columnproperties) {
             let valueNames = [];
             if (Array.isArray(value)) {
@@ -553,46 +507,18 @@ export class Grid {
             // //     'CAU': 'Capacity To Activity <br />Unit',
             // //     'OL': 'Operational Life'
             // // }
-            $(element).parent().jqxTooltip({ position: 'mouse', content: id });
+            $(element).parent().jqxTooltip({ position: 'mouse', content: id, theme: this.themeMaterial });
             //return '<div style="text-align: center; margin-top: 12px; word-wrap:wrap;white-space:normal;">' + element + '</div>';
             //$("#filmPicture1").jqxTooltip({ content: '<b>Title:</b> <i>The Amazing Spider-man</i><br /><b>Year:</b> 2012', position: 'mouse', name: 'movieTooltip'});
         }
 
-        //console.log('rdatTechsows ', this.daTechs)
-        // $("#osy-gridTech").jqxGrid({
-        //     width: '100%',
-        //     autoheight: true,
-        //     columnsheight: 20,
-        //     theme: this.theme(),
-        //     source: this.daTechs,
-        //     editable: true,
-        //     selectionmode: 'none',
-        //     enablehover: false,
-        //     sortable: true,
-        //     pageable: true,
-        //     pagesize: 10,
-        //     pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
-        //     showsortcolumnbackground: false,
-        //     columns: [
-        //         { text: 'techId', datafield: 'TechId', hidden: true },
-        //         { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
-        //         { text: 'Description', datafield: 'Desc', width: '10%', align: 'center', cellsalign: 'left' },
-        //         { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-        //         { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
-        //         { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center' },
-        //         { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-        //         { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-        //         { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-        //         { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-        //         { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue },
-        //         { text: '', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false },
-        //     ]
-        // });
 
+        let height = $(window).height() - 370;
         $("#osy-gridTech").jqxGrid({
             width: '100%',
-            autoheight: true,
-            // columnsheight: 20,
+            //autoheight: true,
+            // columnsheight: 50,
+            height: height,
             theme: this.theme(),
             source: this.daTechs,
             editable: true,
@@ -600,23 +526,23 @@ export class Grid {
             showsortcolumnbackground: false,
             enablehover: false,
             sortable: true,
-            pageable: true,
-            pagesize: 10,
+            // pageable: true,
+            // pagesize: 20,
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             
             columns: [
-                { text: 'techId', datafield: 'TechId', hidden: true },
-                { text: 'Technology', datafield: 'Tech', width: '10%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '10%', align: 'center', cellsalign: 'left',sortable: false },
+                //{ text: 'techId', datafield: 'TechId', hidden: true },
+                { text: 'Technology', datafield: 'Tech', width: '8%', align: 'center', cellsalign: 'left', validation: validation_1 },
+                { text: 'Description', datafield: 'Desc', width: '15%', align: 'center', cellsalign: 'left',sortable: false },
                 { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
                 { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false },
                 { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false },
                 { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
                 { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue ,sortable: false},
-                { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: 'Emission Activity Ratio', datafield: 'EAR', width: '10%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTech" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add technology</span>', datafield: 'Delete', width: '9%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '9%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue ,sortable: false},
+                { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '9%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
+                { text: 'Emission Activity Ratio', datafield: 'EAR', width: '9%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTech" class="btn btn-white btn-osy" ><i class="fa fa-plus fa-lg"></i>Add technology</span>', datafield: 'TechId', width: '9%', cellsrenderer: deleteBtnRender, editable: false, sortable: false },
             ]
    
         })
@@ -649,7 +575,7 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTechGroup" data-id=' + row + ' ><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteTechGroup" data-id=' + row + ' ><i class="fa  fa-times danger"></i>Delete</span>';
         }
 
         $("#osy-gridTechGroup").jqxGrid({
@@ -664,25 +590,35 @@ export class Grid {
             sortable:true,
             showsortcolumnbackground: false,
             columns: [
-                { text: 'TechGroupId', datafield: 'TechGroupId', hidden: true },
+                // { text: 'TechGroupId', datafield: 'TechGroupId', hidden: true },
                 { text: 'Technology group name', datafield: 'TechGroup', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left', sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTechGroup" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add group</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTechGroup" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add group</span>', datafield: 'TechGroupId', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
             ]
         });
     }
 
     static commGrid(commodities) {
-
+        ///settings units
+        let UnitsArray = [];
+        let UnitsSettings = JSON.parse(localStorage.getItem("osy-units"));
+        if(UnitsSettings){
+            UnitsArray = UnitsSettings
+        }
+        else{
+            UnitsArray = UNITS;
+        }
         let srcComms = JqxSources.srcComm(commodities);
-        let srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
+        let srcUnits = JqxSources.srcUnit(JSON.stringify(UnitsArray));
 
         var daComms = new $.jqx.dataAdapter(srcComms);
-        var daUnits = new $.jqx.dataAdapter(srcUnits);
+        var daUnits = new $.jqx.dataAdapter(srcUnits, {
+            autoBind: true
+        });
 
         var ddlEditor = function (row, value, editor) {
-            editor.jqxDropDownList({ source: daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true });
-        }
+            editor.jqxDropDownList({ source: daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true, theme: this.themeMaterial,filterHeight:30 });
+        }.bind(this);
 
         var validation_1 = function (cell, value) {
             var validationResult = true;
@@ -703,16 +639,18 @@ export class Grid {
 
         var cellsrendererbutton = function (row, column, value) {
             // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
-            if (row == 0) {
-                return '';
-            }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteComm" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+            // if (row == 0) {
+            //     return '';
+            // }
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteComm" data-commId=' + value + ' data-id=' + row + ' ><i class="fa fa-times danger"></i>Delete</span>';
         }
 
+        let height = $(window).height() - 370;
         $("#osy-gridComm").jqxGrid({
             width: '100%',
-            autoheight: true,
+            //autoheight: true,
             // columnsheight: 20,
+            height:height,
             theme: this.theme(),
             source: daComms,
             editable: true,
@@ -720,30 +658,39 @@ export class Grid {
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
-            pageable: true,
-            pagesize: 10,
+            // pageable: true,
+            // pagesize: 10,
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
-                { text: 'CommId', datafield: 'CommId', hidden: true },
                 { text: 'Commodity name', datafield: 'Comm', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false },
                 { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addComm" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add commodity</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addComm" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add</span>', datafield: 'CommId', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
     }
 
     static emisGrid(emissions) {
 
+        ///settings units
+        let UnitsArray = [];
+        let UnitsSettings = JSON.parse(localStorage.getItem("osy-units"));
+        if(UnitsSettings){
+            UnitsArray = UnitsSettings
+        }
+        else{
+            UnitsArray = UNITS;
+        }
+
         let srcEmi = JqxSources.srcEmi(emissions);
-        let srcUnit = JqxSources.srcUnit(JSON.stringify(UNITS));
+        let srcUnit = JqxSources.srcUnit(JSON.stringify(UnitsArray));
 
         var daEmi = new $.jqx.dataAdapter(srcEmi);
         var daUnit = new $.jqx.dataAdapter(srcUnit);
 
         var ddlEditor = function (row, value, editor) {
-            editor.jqxDropDownList({ source: daUnit, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true  });
-        }
+            editor.jqxDropDownList({ source: daUnit, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true,theme: this.themeMaterial,filterHeight:35  });
+        }.bind(this);
 
         var validation_1 = function (cell, value) {
             var validationResult = true;
@@ -767,7 +714,7 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteEmis" data-id=' + row + '><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteEmis" data-id=' + row + '><i class="fa  fa-times danger"></i>Delete</span>';
         }
 
         var tooltiprenderer = function (element) {
@@ -798,18 +745,26 @@ export class Grid {
                 { text: 'Emission name', datafield: 'Emis', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false },
                 { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
             ]
         });
     }
 
     static stgGrid(storages, techs, techNames) {
 
+        ///settings units
+        let UnitsArray = [];
+        let UnitsSettings = JSON.parse(localStorage.getItem("osy-units"));
+        if(UnitsSettings){
+            UnitsArray = UnitsSettings
+        }
+        else{
+            UnitsArray = UNITS;
+        }
+
         let srcStg = JqxSources.srcStorage(storages);
-        let srcUnits = JqxSources.srcUnit(JSON.stringify(UNITS));
+        let srcUnits = JqxSources.srcUnit(JSON.stringify(UnitsArray));
         this.srcTechs = JqxSources.srcTech(techs);
-
-
 
         var daStg = new $.jqx.dataAdapter(srcStg);
         var daUnits = new $.jqx.dataAdapter(srcUnits);
@@ -820,45 +775,47 @@ export class Grid {
 
 
         var ddlEditor = function (row, value, editor) {
-            editor.jqxDropDownList({ source: daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true });
-        }
+            editor.jqxDropDownList({ source: daUnits, displayMember: 'name', valueMember: 'id', groupMember: 'group', filterable: true,theme: this.themeMaterial,filterHeight:30 });
+        }.bind(this);
 
-        // var ddlStgOperations = function (row, value, editor) {
-        //     editor.jqxDropDownList({ source: daStgOperations, displayMember: 'name', valueMember: 'id' });
-        // }
         var ddlStgOperations = function (row, value, editor) {
-            editor.jqxDropDownList({ source: STORAGE_OPERATIONS, theme: 'bootstrap'});
-        }
+            editor.jqxDropDownList({ source: STORAGE_OPERATIONS, theme: 'bootstrap',theme: this.themeMaterial});
+        }.bind(this);
 
         var ddlTechs = function (row, value, editor) {
             let data = techs;
             editor.jqxDropDownList({
-                source: this.daTechs, displayMember: 'Tech', valueMember: 'TechId',
+                source: this.daTechs, displayMember: 'Tech', valueMember: 'TechId', filterable: true ,theme: this.themeMaterial,filterHeight:30,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
                     return tooltipContent
-                }
-                , filterable: true 
+                }    
             });
         }.bind(this);
 
         var cellsrendererTechs = function (row, columnfield, value, defaulthtml, columnproperties) {
-            let valueNames = [];
-            if (Array.isArray(value)) {
-                var values = value;
-            } else {
-                var values = value.split(/,\s*/);
-            }
-            $.each(values, function (id, techId) {
-                valueNames.push(techNames[techId])
-            });
-            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+            // let valueNames = [];
+            // if (Array.isArray(value)) {
+            //     var values = value;
+            // } else {
+            //     var values = value.split(/,\s*/);
+            // }
+            // $.each(values, function (id, techId) {
+            //     valueNames.push(techNames[techId])
+            // });
+            // return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${valueNames} </div>`;
+
+            return `<div class='jqx-grid-cell-middle-align' style="margin-top: 8.5px;">${techNames[value]} </div>`;
         }.bind(this);
 
         var getEditorValue = function (row, cellvalue, editor) {
             return editor.val();
         }
+
+        var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
+            editor.jqxDropDownList('selectItem', cellvalue);
+        };
 
         var validation_1 = function (cell, value) {
             var validationResult = true;
@@ -877,11 +834,7 @@ export class Grid {
         }
 
         var cellsrendererbutton = function (row, column, value) {
-            // var id = $("#osy-gridComm").jqxGrid('getrowid', row);
-            // if (row == 0) {
-            //     return '';
-            // }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteStg" data-id=' + row + ' ><i class="fa fa-minus-circle fa-lg danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteStg" data-id=' + row + ' ><i class="fa fa-times danger"></i>Delete</span>';
         }
 
         $("#osy-gridStg").jqxGrid({
@@ -904,11 +857,11 @@ export class Grid {
                 { text: 'Description', datafield: 'Desc', width: '20%', align: 'center', cellsalign: 'left',sortable: false },
                 { text: 'Unit', datafield: 'UnitId', width: '10%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
                 
-                { text: 'Technology to storage', datafield: 'TTS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist', createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Technology from storage', datafield: 'TFS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist', createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Technology to storage', datafield: 'TTS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist', initeditor:initeditor,createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Technology from storage', datafield: 'TFS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist',initeditor:initeditor, createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
 
                 { text: 'Storage operations', datafield: 'Operation', width: '10%', columntype: 'dropdownlist', createeditor: ddlStgOperations, align: 'center', cellsalign: 'center',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addStg" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add storage</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addStg" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add storage</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
     }
@@ -940,7 +893,7 @@ export class Grid {
             if (row == 0) {
                 return '';
             }
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteScenario" data-id=' + row + ' ><i class="fa  fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-white btn-default deleteScenario" data-id=' + row + ' ><i class="fa  fa-times danger"></i>Delete</span>';
         }
 
         $("#osy-gridScenario").jqxGrid({
@@ -958,7 +911,7 @@ export class Grid {
                 { text: 'ScenarioId', datafield: 'ScenarioId', hidden: true },
                 { text: 'Scenario name', datafield: 'Scenario', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
                 { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addScenario" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add scenario</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addScenario" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add scenario</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
             ]
         });
     }
@@ -982,7 +935,7 @@ export class Grid {
             // let data = this.daTech.records;
             let data = techs;
             editor.jqxDropDownList({
-                source: this.daTech, displayMember: 'Tech', valueMember: 'TechId', checkboxes: true,
+                source: this.daTech, displayMember: 'Tech', valueMember: 'TechId', checkboxes: true,theme: this.themeMaterial,filterHeight:30,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -997,7 +950,7 @@ export class Grid {
         }.bind(this);
 
         var ddlTags = function (row, value, editor) {
-            editor.jqxDropDownList({ source: this.daTags, displayMember: 'name', valueMember: 'id' });
+            editor.jqxDropDownList({ source: this.daTags, displayMember: 'name', valueMember: 'id',theme: this.themeMaterial });
         }.bind(this);
 
         var validation_1 = function (cell, value) {
@@ -1047,7 +1000,7 @@ export class Grid {
         }.bind(this);
 
         var cellsrendererbutton = function (row, column, value) {
-            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteConstraint" data-id=' + row + ' ><i class="fa fa-minus-circle danger"></i>Delete</span>';
+            return '<span style="padding:10px; width:100%; border:none" class="btn btn-default deleteConstraint" data-id=' + row + ' ><i class="fa fa-times danger"></i>Delete</span>';
         }
 
         var cellsrendererTechs = function (row, columnfield, value, defaulthtml, columnproperties) {
@@ -1084,18 +1037,27 @@ export class Grid {
                 { text: 'Description', datafield: 'Desc', width: '40%', align: 'center', cellsalign: 'left',sortable: false },
                 { text: 'Tag', datafield: 'Tag', displayfield: 'TagName', width: '10%', columntype: 'dropdownlist', createeditor: ddlTags, align: 'center', cellsalign: 'center', sortable: false },
                 { text: 'Technology', datafield: 'CM', width: '20%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue, sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addConstraint" class="btn btn-secondary" ><i class="fa fa-plus fa-lg osy-green"></i>Add constraint</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton, sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addConstraint" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add constraint</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton, sortable: false },
             ]
         });
     }
 
     static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true, sortable= false, autoshowfiltericon=false}={}) {
+        //setting page size
+        // let pagesize = JSON.parse(localStorage.getItem("osy-pagesize"));
+        // if(!pagesize){
+        //     pagesize = '20';
+        // }
+
+        let height = $(window).height() - 255;
         $div.jqxGrid({
             theme: this.theme(),
             width: '100%',
             //height:71+count*26,
-            autoheight: true,
+            //autoheight: true,
+            height: height,
             autoshowloadelement: true,
+            showdefaultloadelement: true,
             rowsheight: 30,
             source: daGrid,
             columnsautoresize: true,
@@ -1104,11 +1066,11 @@ export class Grid {
             filterable: filterable,
             autoshowfiltericon: autoshowfiltericon,
             sortable: sortable,
-            pageable: pageable,
-            pagesize: '20',
-            pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
+            // pageable: pageable,
+            // pagesize: pagesize,
+            // pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
             // pagermode: "simple",
-            //filtermode: 'excel',
+            filtermode: 'excel',
             enableellipsis: true,
             enablekeyboarddelete: false,
             editable: editable,
@@ -1119,6 +1081,7 @@ export class Grid {
             editmode: 'selectedcell',
             showsortcolumnbackground: false,
             showfiltercolumnbackground: false,
+            scrollmode: 'logical',
             // virtualmode: true,
             // rendergridrows: rendergridrows,
             cellhover: function (element, pageX, pageY, record) {
@@ -1165,7 +1128,8 @@ export class Grid {
                 }
             },
 
-            columns: columns
+            columns: columns          
+            
         });
 
     }

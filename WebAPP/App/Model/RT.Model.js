@@ -4,9 +4,15 @@ import { GROUPNAMES } from "../../Classes/Const.Class.js";
 export class Model {
 
     constructor(casename, genData, RTdata, group, PARAMETERS, param) {
-        this.d = 0;
-        // this.decimal = 'd' + this.d;
-        this.decimal = 'n0';
+        if(param == 'OL'){
+            this.d = 0;
+            this.decimal = 'n0';
+
+        }
+        else{
+            this.d = 2;
+            this.decimal = 'd' + this.d;
+        }
 
         if (casename) {
 
@@ -17,8 +23,6 @@ export class Model {
 
             let techs = genData['osy-tech'];
             let scenarios = genData['osy-scenarios'];
-            this.param = param;
-
             this.param = param;
 
             let RTgrid = DataModel.RTgrid(genData, RTdata, PARAMETERS);
@@ -61,7 +65,7 @@ export class Model {
                     if (value < 0) {
                         return { result: false, message: 'Value must be positive!' };
                     } 
-                    else if(!Number.isInteger(value)){
+                    else if(!Number.isInteger(value) && this.param =='OL'){
                         return { result: false, message: 'Operation life cannot be decimal number!' };
                     }
                     else {
@@ -79,13 +83,7 @@ export class Model {
                     return '<span style="margin: 4px; float:right; ">n/a</span>';
                 } else {
                     var formattedValue = $.jqx.dataFormat.formatnumber(value, this.decimal);
-
-                    // if(columnfield == 'TEC_0' && row == 0){
-                    //     console.log('cellsrenderer ', value)
-                    //     console.log('formattedValue ', formattedValue)
-                    // }
-
-                    return '<span style="margin: 4px; float:right; ">' + value + '</span>';
+                    return '<span style="margin: 4px; float:right; ">' + formattedValue + '</span>';
                 }
 
             }.bind(this);
@@ -118,9 +116,10 @@ export class Model {
             let techIds = [];
             $.each(techs, function (id, tech) {
                 techIds.push(tech.TechId);
+                let techName = tech.Tech + ' <small  style="color:darkgrey">[ ' + techUnit[param][tech.TechId] + ' ]</small>'
                 datafields.push({ name: tech['TechId'], type: 'number' });
                 columns.push({
-                    text: tech.Tech + ' <small  style="color:darkgrey">[ ' + techUnit[param][tech.TechId] + ' ]</small>', 
+                    text: techName, 
                     datafield: tech.TechId, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 150, maxWidth: 300,
                     groupable: false,
                     initeditor: initeditor,
@@ -146,10 +145,9 @@ export class Model {
             };
 
             this.casename = casename;
-            // this.param = param;
-            //this.years = years;
             this.techs = techs;
             this.techIds = techIds;
+            this.techNames = DataModel.TechName(genData);
             this.techsCount = techs.length
             this.techUnit = techUnit;
             this.scenarios = scenarios;
@@ -162,9 +160,10 @@ export class Model {
             this.PARAMNAMES = PARAMNAMES;
             this.group = group;
             this.srcGrid = srcGrid,
-                this.srcChart = srcChart,
-                this.PARAMETERS = PARAMETERS
-        } else {
+            this.srcChart = srcChart,
+            this.PARAMETERS = PARAMETERS
+        } 
+        else {
             this.casename = null;
             this.years = null;
             this.techs = null;
@@ -182,6 +181,5 @@ export class Model {
             this.srcChart = srcChartm
             this.PARAMETERS = PARAMETERS
         }
-
     }
 }

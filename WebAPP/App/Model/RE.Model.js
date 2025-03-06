@@ -129,6 +129,7 @@ export class Model {
             //this.years = years;
             this.emis = emis;
             this.emiIds = emiIds;
+            this.emiNames = DataModel.EmiName(genData);
             this.emiUnit = emiUnit;
             this.emiCount = emis.length
             this.scenarios = scenarios;

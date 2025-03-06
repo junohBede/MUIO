@@ -308,10 +308,27 @@ export default class R {
             res = !res;        
         });
     
+        // $("#xlsAll").off('click');
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $divGrid.jqxGrid('exportdata', 'xls', 'R');
+        // });
+
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'R');
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc','Param',  'value']));
+
+            Base.prepareCSV(model.casename, data)
+            .then(response =>{
+                Message.smallBoxInfo('Model message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
         $("#decUp").off('click');

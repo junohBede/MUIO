@@ -60,6 +60,7 @@ export class Model {
 
         var VAR_IDS = VARIABLEOBJECT.map(function (el) { return el.value; });
 
+        let stgDecimalPoints = localStorage.getItem("osy-decimalpoints") != null ? localStorage.getItem("osy-decimalpoints") : 'n2';
 
         this.casename = casename;
         this.genData = genData;
@@ -79,5 +80,6 @@ export class Model {
         this.ColorSchemes = colorSchemes;
         this.TriggerUpdate = true;
         this.refreshPage = false;
+        this.stgDecimalPoints = stgDecimalPoints;
     }
 }

@@ -23,12 +23,21 @@ export class Routes {
     }
 
     static getRoutes(model){
+        //settings 
+        import('../App/Controller/Settings.js')
+        .then(Settings => {
+            $( ".demo" ).load( 'App/View/Settings.html', function() {
+                Settings.default.Load();
+            });
+        });
+
         //Sidebar.Load(PARAMETERS);
         crossroads.addRoute('/', function() {
             $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
             import('../App/Controller/Home.js')
             .then(Home => {
                 $( ".osy-content" ).load( 'App/View/Home.html', function() {
+                    localStorage.setItem("osy-pageId", "Home");
                     Home.default.onLoad();
                 });
             });
@@ -38,6 +47,7 @@ export class Routes {
             import('../App/Controller/Config.js')
             .then(Config => {
                 $( ".osy-content" ).load( 'App/View/Config.html', function() {
+                    localStorage.setItem("osy-pageId", "Config");
                     Config.default.onLoad();
                 });
             });
@@ -47,6 +57,7 @@ export class Routes {
             import('../App/Controller/AddCase.js')
             .then(AddCase => {
                 $( ".osy-content" ).load( 'App/View/AddCase.html', function() {
+                    localStorage.setItem("osy-pageId", "AddCase");
                     AddCase.default.onLoad();
                 });
             });
@@ -56,6 +67,7 @@ export class Routes {
             import('../App/Controller/ViewData.js')
             .then(ViewData => {
                 $( ".osy-content" ).load( 'App/View/ViewData.html', function() {
+                    localStorage.setItem("osy-pageId", "ViewData");
                     ViewData.default.onLoad();
                 });
             });
@@ -65,6 +77,7 @@ export class Routes {
             import('../App/Controller/LegacyImport.js')
             .then(ViewData => {
                 $( ".osy-content" ).load( 'App/View/LegacyImport.html', function() {
+                    localStorage.setItem("osy-pageId", "LegacyImport");
                     ViewData.default.onLoad();
                 });
             });
@@ -76,6 +89,7 @@ export class Routes {
                 import(`../App/Controller/${group}.js`)
                 .then(f => {
                     $( ".osy-content" ).load( `App/View/${group}.html`, function() {
+                        localStorage.setItem("osy-pageId", `${group}`);
                         f.default.onLoad(group, id);
                     });
                 });
@@ -91,6 +105,7 @@ export class Routes {
             import('../App/Controller/DataFile.js')
             .then(DataFile => {
                 $( ".osy-content" ).load( 'App/View/DataFile.html', function() {
+                    localStorage.setItem("osy-pageId", "DataFile");
                     DataFile.default.onLoad();
                 });
             });
@@ -98,12 +113,14 @@ export class Routes {
         crossroads.addRoute('/Versions', function() {
             $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
             $( ".osy-content" ).load( 'App/View/Versions.html');
+            localStorage.setItem("osy-pageId", "Versions");
         });
         crossroads.addRoute('/Pivot', function() {
             $('#content').html('<h1 class="ajax-loading-animation"><i class="fa fa-cog fa-spin"></i> Loading...</h1>');
             import('../AppResults/Controller/Pivot.js')
             .then(Pivot => {
                 $( ".osy-content" ).load( 'AppResults/View/Pivot.html', function() {
+                    localStorage.setItem("osy-pageId", "Pivot");
                     Pivot.default.onLoad();
                 });
             });
@@ -113,6 +130,7 @@ export class Routes {
             import('../App/Controller/RESViewer.js')
             .then(RESViewer => {
                 $( ".osy-content" ).load( 'App/View/RESViewer.html', function() {
+                    localStorage.setItem("osy-pageId", "RESViewer");
                     RESViewer.default.onLoad();
                 });
             });
@@ -122,6 +140,7 @@ export class Routes {
             import('../App/Controller/RESViewerMermaid.js')
             .then(RESViewer => {
                 $( ".osy-content" ).load( 'App/View/RESViewerMermaid.html', function() {
+                    localStorage.setItem("osy-pageId", "RESViewerMermaid");
                     RESViewer.default.onLoad();
                 });
             });

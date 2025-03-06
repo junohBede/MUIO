@@ -494,7 +494,7 @@ export default class DataFile {
             e.stopImmediatePropagation();
             Html.renderScOrder( model.scBycs[model.cs]);
             Message.clearMessages();
-            //console.log('select, ', model)
+            console.log('select, ', model)
             var caserunanme = $(this).attr('data-ps');
             model.cs = caserunanme;
             Html.renderScOrder( model.scBycs[model.cs]);
@@ -527,17 +527,22 @@ export default class DataFile {
             })
             .then(data => {
                 let [DataFile, ResultCSV] = data;
+                console.log('data ', data)
                 if (ResultCSV.length != 0) {
                     $(".Results").show();
                     Html.renderCSV(ResultCSV, model.cs)
                 } 
                 if (DataFile) {
                     $(".DataFile").show();
+                    $("#osy-generateDataFile").show();
+   
                     Html.renderDataFile(DataFile, model);
                 } 
                 else if(!DataFile && ResultCSV.length == 0){
                     $(".DataFile").hide();
                     $(".Results").hide();
+                    $("#osy-generateDataFile").hide();
+
                     $("#osy-generateDataFile").show();
                     Message.smallBoxWarning("Run case message", "Please generate data file!", 3000);
                 }

@@ -90,6 +90,7 @@ export class Html {
         });
 
         let dt = new Date(value.Runtime).toLocaleString()
+        console.log('value ', value.Case)
         let htmlstring = `
             <div class="panel panel-default" id=l_${value.Case.replace(/[^A-Z0-9]/ig, "")}>
                 <div class="panel-heading">
@@ -235,7 +236,7 @@ export class Html {
 
     static lblScenario(label) {
         $('#scCommand').show();
-        $('#scCount').text(label)
+        $('#scCount').text(label);
     }
 
     static genData(model) {
@@ -592,8 +593,17 @@ export class Html {
         var container = $('#osy-years');
         container.empty();
         for (var i = from; i <= to; i++) {
-            container.append(' <label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '" checked disabled/><i></i>' + i + '</label>');
+            container.append('<label class="checkbox"><input type="checkbox" name="Year[' + i + ']" id="' + i + '" checked disabled/><i></i>' + i + '</label>');
+            //container.append(` <label><input type="checkbox" class="checkbox style-0" name="unit" id="' ${i} '" checked > <span>${i}</span></label>`);
         }
+
+
+        // unitsList += `
+        // <label class="col-md-4">
+        //     <input type="checkbox" class="checkbox style-0" name="Year['${i}']" id="' ${i} '" checked disabled>
+        //     <span>${obj.name}</span>
+        // </label>
+        // `;
     }
 
     static renderSparkline(fuels, perByFuel, capByFuel, totCapByFuel) {
@@ -630,9 +640,13 @@ export class Html {
         $.each(scs, function (sc, flag) {
             if (flag.ScenarioId == 'SC_0') {
                 var sc0 =
-                    `<div class="sortable-item" id=` + flag.ScenarioId + `><i class="fa fa-lock danger" aria-hidden="true"></i>` + flag.Scenario + `
+                    `<div class="sortable-item" id=` + flag.ScenarioId + `><i class="fa fa-lock fa-lg danger" aria-hidden="true"></i>` + flag.Scenario + `
                     
-                    <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked disabled/></span>
+                    <span class="pull-right">
+                        <label class="checkbox">
+                            <input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked disabled/> <i></i>&nbsp;
+                        </label>
+                    </span>
                 </div>`;
                 $("#osy-sc0").html(sc0);
                 //$("#osy-sc0").jqxSortable();
@@ -640,15 +654,23 @@ export class Html {
                 if (flag.Active) {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
-                        <i class="fa fa-sort osy-main-color" aria-hidden="true"></i>` + flag.Scenario + `
-                        <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked/></span>
+                        <i class="fa fa-sort fa-lg osy-main-color" aria-hidden="true"></i>` + flag.Scenario + `
+                        <span class="pull-right">
+                            <label class="checkbox">
+                                <input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" checked/><i></i>&nbsp;
+                            </label>
+                        </span>
                     </div>`;
                     sortableList = sortableList + sortableElement;
                 } else {
                     var sortableElement =
                         `<div class="sortable-item" id=` + flag.ScenarioId + `>
-                        <i class="fa fa-sort osy-main-color" aria-hidden="true"></i>` + flag.Scenario + `
-                        <span class="pull-right"><input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" /></span>
+                            <i class="fa fa-sort fa-lg osy-main-color" aria-hidden="true"></i>` + flag.Scenario + `
+                        <span class="pull-right">
+                            <label class="checkbox">
+                                <input type="checkbox" name="enable[`+ flag.ScenarioId + `]" id="` + flag.ScenarioId + `" /><i></i>&nbsp;
+                            </label>
+                        </span>
                     </div>`;
                     sortableList = sortableList + sortableElement;
                 }
@@ -779,6 +801,21 @@ export class Html {
         }
 
 
+    }
+
+    static renderSettingsUnits(units) {
+        var container = $('#settingUnit');
+        var unitsList = '';
+        container.empty();
+        $.each(units, function (id, obj) {  
+            unitsList += `
+            <label class="col-md-4">
+                <input name="unit" id="${obj.id}" type="checkbox" class="checkbox style-0">
+                <span>${obj.name}</span>
+            </label>
+            `;
+        });
+        container.html(unitsList);
     }
 }
 

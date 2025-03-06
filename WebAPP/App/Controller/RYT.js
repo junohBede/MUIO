@@ -139,6 +139,7 @@ export default class RYT {
 
         //change of ddl parameters
         $('#osy-ryt').on('change', function () {
+            $divGrid.jqxGrid('showloadelement');
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             model.param = this.value;
             model.srcGrid.root = this.value;
@@ -151,6 +152,7 @@ export default class RYT {
             Grid.applyGridFilter($divGrid, model.years);
             Html.lblScenario( model.scenariosCount);
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
+           
         });
 
         $("#osy-scenarios").off('click');
@@ -285,7 +287,8 @@ export default class RYT {
             $divGrid.jqxGrid('refresh');
         });
 
-        $("#showLog").click(function (e) {
+        $("#showLog").off('click');
+        $("#showLog").on('click',function (e) {
             e.preventDefault();
             $('#definition').html(`${DEF[model.group][model.param].definition}`);
             $('#definition').toggle('slow');

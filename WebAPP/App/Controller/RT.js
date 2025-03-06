@@ -48,6 +48,10 @@ export default class RT {
         Html.title(model.casename, model.PARAMNAMES[model.param], GROUPNAMES[model.group]);
         Html.ddlParams(model.PARAMETERS[model.group], model.param);
 
+        if(model.param == 'OL'){
+            $('#decBtns').hide();
+        }
+
         let $divGrid = $('#osy-gridRT');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
         Grid.Grid($divGrid, daGrid, model.columns, {pageable: false})
@@ -142,7 +146,21 @@ export default class RT {
             Html.title(model.casename, model.PARAMNAMES[this.value], GROUPNAMES[model.group]);
             model.srcGrid.root = this.value;
             let newParam = this.value;
+
+           
+            if(this.value == 'OL'){
+                model.d=0;
+                model.decimal = 'n0';
+                $('#decBtns').hide();
+                //$divGrid.jqxGrid('refresh');
+            }else{
+                model.d=2;
+                model.decimal = 'd' + model.d;
+                $('#decBtns').show();
+            }
+
             $divGrid.jqxGrid('updatebounddata');
+
             $.each(model.techs, function (idT, tech) {
                 $divGrid.jqxGrid('setcolumnproperty', tech.TechId, 'text', tech.Tech + ' <small style="color:darkgrey">[ ' + model.techUnit[newParam][tech.TechId] + ' ]</small>');
             });
@@ -231,8 +249,10 @@ export default class RT {
             Message.smallBoxInfo('Info', 'Scenario data removed!', 2000);
         });
 
-
-
+        Number.prototype.countDecimals = function () {
+            if(Math.floor(this.valueOf()) === this.valueOf()) return 0;
+            return this.toString().split(".")[1].length || 0; 
+        }
 
         let pasteEvent = false;
         let integerFlag = true;
@@ -243,10 +263,8 @@ export default class RT {
             var key = event.charCode ? event.charCode : event.keyCode ? event.keyCode : 0;
             if (key == vKey) {
                 pasteEvent = true;
-
                 setTimeout(function () {
                     let gridData = $divGrid.jqxGrid('getboundrows');
-                    console.log('gidData ', gridData)
                     let param = $("#osy-ryt").val();
                     let chartData = [];
                     $.each(model.techs, function (id, tech) {
@@ -255,13 +273,13 @@ export default class RT {
                         chunk['Tech'] = tech.Tech;
                         $.each(gridData, function (id, rtDataObj) {
                             //provjeriti da li je integer  
-                            if(!Number.isInteger(rtDataObj[tech.TechId]) && rtDataObj[tech.TechId] != null ){
-                                console.log('rtDataObj[tech.TechId] ', rtDataObj[tech.TechId])
+                            if(!Number.isInteger(rtDataObj[tech.TechId]) && rtDataObj[tech.TechId] != null && model.param =='OL'){
                                 integerFlag = false;
                                 rtDataObj[tech.TechId] = Math.ceil(rtDataObj[tech.TechId]);
                                 chunk[rtDataObj.ScId] = rtDataObj[tech.TechId];
                             }
                             else{
+                                //console.log('decimals digits ',rtDataObj[tech.TechId],  rtDataObj[tech.TechId].countDecimals())
                                 chunk[rtDataObj.ScId] = rtDataObj[tech.TechId];
                             }
 
@@ -365,28 +383,70 @@ export default class RT {
             res = !res;
         });
 
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $divGrid.jqxGrid('exportdata', 'xls', 'RT');
+        // });
+
+        $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'RT');
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'Param'].concat(model.techIds)));
+
+            let dataNames = [];
+            let tmp={};
+            $.each(data[0], function (id, val) { 
+                if (id != "Sc" && id != "Param") {
+                    let techName = model.techNames[id];
+                    tmp[techName] = val;
+                }else{
+                    tmp[id] = val;
+                }
+            });
+            dataNames.push(tmp)
+
+            Base.prepareCSV(model.casename, dataNames)
+            .then(response =>{
+                Message.smallBoxInfo('Model message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
-        // $("#decUp").off('click');
-        // $("#decUp").on('click', function (e) {
-        //     e.preventDefault();
-        //     e.stopImmediatePropagation();
-        //     model.d++;
-        //     model.decimal = 'd' + parseInt(model.d);
-        //     $divGrid.jqxGrid('refresh');
-        // });
+        $("#decUp").off('click');
+        $("#decUp").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (model.d == 5){
+                Message.smallBoxWarning('WARNING', 'You have reached max number of decimal places (5).', 4000)
+            }
+            else{
+                model.d++;
+                model.decimal = 'd' + parseInt(model.d);
+                $divGrid.jqxGrid('updatebounddata');
+            }
+            // model.d++;
+            // model.decimal = 'd' + parseInt(model.d);
+            // $divGrid.jqxGrid('updatebounddata');
+        });
 
-        // $("#decDown").off('click');
-        // $("#decDown").on('click', function (e) {
-        //     e.preventDefault();
-        //     e.stopImmediatePropagation();
-        //     model.d--;
-        //     model.decimal = 'd' + parseInt(model.d);
-        //     $divGrid.jqxGrid('refresh');
-        // });
+        $("#decDown").off('click');
+        $("#decDown").on('click', function (e) {
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (model.d == 0){
+                Message.smallBoxWarning('WARNING', 'Number of decimal places cannot be lower then 0.', 4000)
+            }
+            else{
+                model.d--;
+                model.decimal = 'd' + parseInt(model.d);
+                $divGrid.jqxGrid('updatebounddata');
+            }
+        });
 
         $("#showLog").click(function (e) {
             e.preventDefault();

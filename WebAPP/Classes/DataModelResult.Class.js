@@ -104,6 +104,14 @@ export class DataModelResult{
         return commData;
     }
 
+    static getConData(genData){
+        let conData = {};
+        $.each(genData['osy-constraints'], function (id, obj) {
+            conData[obj.Con] = obj;
+        });
+        return conData;
+    }
+
     static getStgData(genData){
         let stgData = {};
         $.each(genData['osy-stg'], function (id, obj) {
@@ -206,6 +214,7 @@ export class DataModelResult{
         let paramById = DataModel.getParamById(VARIABLES);
         let techData = this.getTechData(genData);
         let commData = this.getCommData(genData);
+        let conData = this.getConData(genData);
         let emiData = this.getEmiData(genData);
         let stgData = this.getStgData(genData);
         let techGroupData = this.getTechGroupData(genData);
@@ -223,134 +232,162 @@ export class DataModelResult{
         $.each(DATA[param], function (cs, array) {    
             //console.log('DATA ', DATA[param]) 
             $.each(array, function (id, obj) {
-                $.each(years, function (idY, year) { 
-                    let chunk = {};
-                    chunk['Case'] = cs;
-                    // if(obj.Tech){
-                    //     chunk['Tech'] = obj.Tech;  
-                    //     dataT = unitData[group][param][obj.Tech];
-                    // }
 
-                    //provjera da li u obj ima Comm, Tech, Stg, Emi... Redosljed je bitan za one varijable koje zavise vise od jednog seta, definicja 
-                    //unita ce da zavisi od toga
+                if(obj.ObjectiveValue){
+                    let chunkOv = {};
+                    chunkOv['Case'] = cs;
+                    chunkOv['Unit'] = 'n/a';
+                    chunkOv['Optimal'] = 'Objective Value';
+                    chunkOv['Value'] = obj.ObjectiveValue;
+                    pivotData.push(chunkOv);
+                }
+                else{
+                    $.each(years, function (idY, year) { 
+                        let chunk = {};
+                        chunk['Case'] = cs;
+                        // if(obj.Tech){
+                        //     chunk['Tech'] = obj.Tech;  
+                        //     dataT = unitData[group][param][obj.Tech];
+                        // }
+    
+                        //provjera da li u obj ima Comm, Tech, Stg, Emi... Redosljed je bitan za one varijable koje zavise vise od jednog seta, definicja 
+                        //unita ce da zavisi od toga
+       
+                        if(obj.MoId){
+                            chunk['MoId'] = obj.MoId;
+                        }
+                        if(obj.Ts){
+                            chunk['Ts'] = obj.Ts;
+                        }
+                        chunk['Year'] = year;
+                        
+                        if(year in obj){
+                            chunk['Value'] = obj[year];
+                        }
+                        else{
+                            // console.log('Value ', obj[year], ' cs ', cs,  ' year ', year , ' param ', param)
+                            //console.log('Value ', obj[year])
+                            chunk['Value'] = null;
+                        }
+    
+                        // let rule = paramById[group][param]['unitRule'];
+                        // const data = {...dataC, ...dataE, ...dataS};
+                        // chunk['Unit'] = jsonLogic.apply(rule, data);
+                        
 
-                    if(obj.MoId){
-                        chunk['MoId'] = obj.MoId;
-                    }
-                    if(obj.Ts){
-                        chunk['Ts'] = obj.Ts;
-                    }
-                    chunk['Year'] = year;
-                    
-                    if(year in obj){
-                        chunk['Value'] = obj[year];
-                    }
-                    else{
-                        // console.log('Value ', obj[year], ' cs ', cs,  ' year ', year , ' param ', param)
-                        //console.log('Value ', obj[year])
-                        chunk['Value'] = null;
-                    }
-
-                    // let rule = paramById[group][param]['unitRule'];
-                    // const data = {...dataC, ...dataE, ...dataS};
-                    // chunk['Unit'] = jsonLogic.apply(rule, data);
-                    
-                    if(obj.Tech){
-                        //console.log('techData ', obj.Tech, '------',  techData[obj.Tech])   //DEMINDLFO 
-                        //vk 18972024 ovaj uslov dodat - ako korisnik izbrise tech on ce ostati u view json filovima i doci ce do greske, ovaj tech se mora ignorisati u pivotdata
-                        if(obj.Tech in techData){
-                            let rule = paramById[group][param]['unitRule'];
-                            if(techData[obj.Tech].TG.length != 0){
-                                $.each(techData[obj.Tech].TG, function (id, tg) {
-                                    let tmp = {};
-                                    tmp = JSON.parse(JSON.stringify(chunk));
-                                    tmp['Tech'] = obj.Tech;  
-                                    tmp['TechGroup'] = techGroupNames[tg];
-                                    tmp['TechDesc'] = techData[obj.Tech]["Desc"];
-                                    tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
+                        if(obj.Comm){
+                            
+                            //uslov dodan vk 18072924 ako smo izbrisali commodity a postoji u resulttima
+                            if(obj.Comm in commData){
+                                chunk['Comm'] = obj.Comm;
+                                chunk['CommDesc'] = commData[obj.Comm]["Desc"];
+                               
+                                dataC = unitData[group][param][obj.Comm];
+                                let rule = paramById[group][param]['unitRule'];
+                                chunk['Unit'] = jsonLogic.apply(rule, {...dataC});
+                            }
+                            else{
+                                chunk['Comm'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm;
+                                chunk['CommDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm + " deleted from model";
+                                chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                            }
+                        }
+    
+                        if(obj.Con){
+                            
+                            if(obj.Con in conData){
+                                chunk['Con'] = obj.Con;
+                                chunk['ConDesc'] = conData[obj.Con]["Desc"];
+                                chunk['Unit'] = 'n/a';
+                               
+                            }
+                            else{
+                                chunk['Con'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Con;
+                                chunk['ConDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Con + " deleted from model";
+                                chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                            }
+                        }
+    
+                        if(obj.Stg){
+                            
+                            if(obj.Stg in stgData){
+                                chunk['Stg'] = obj.Stg;
+                                chunk['StgDesc'] = stgData[obj.Stg]["Desc"];
+                                dataS = unitData[group][param][obj.Stg];
+                                let rule = paramById[group][param]['unitRule'];
+                                chunk['Unit'] = jsonLogic.apply(rule, {...dataS});
+                            }
+                            else{
+                                chunk['Stg'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Stg;
+                                chunk['StgDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Stg + " deleted from model";
+                                chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                            }
+                        }
+                        if(obj.Emi){
+                            
+                            if(obj.Emi in emiData){
+                                chunk['Emi'] = obj.Emi;
+                                chunk['EmiDesc'] = emiData[obj.Emi]["Desc"];
+                                dataE = unitData[group][param][obj.Emi];
+                                let rule = paramById[group][param]['unitRule'];
+                                chunk['Unit'] = jsonLogic.apply(rule, {...dataE});
+                            }
+                            else{
+                                chunk['Emi'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Emi;
+                                chunk['EmiDesc'] =  '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Emi+' deleted from model';
+                                chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                            }
+                        }
+                        if(obj.Tech){
+                            //console.log('techData ', obj.Tech, '------',  techData[obj.Tech])   //DEMINDLFO 
+                            //vk 18972024 ovaj uslov dodat - ako korisnik izbrise tech on ce ostati u view json filovima i doci ce do greske, ovaj tech se mora ignorisati u pivotdata
+                            if(obj.Tech in techData){
+                                let rule = paramById[group][param]['unitRule'];
+                                if(techData[obj.Tech].TG.length != 0){
+                                    $.each(techData[obj.Tech].TG, function (id, tg) {
+                                        let tmp = {};
+                                        tmp = JSON.parse(JSON.stringify(chunk));
+                                        tmp['Tech'] = obj.Tech;  
+                                        tmp['TechGroup'] = techGroupNames[tg];
+                                        tmp['TechDesc'] = techData[obj.Tech]["Desc"];
+                                        tmp['TechGroupDesc'] = techGroupData[tg]["Desc"];
+                                        dataT = unitData[group][param][obj.Tech];
+                                        tmp['Unit'] = jsonLogic.apply(rule, {...dataT});
+                                        pivotData.push(tmp);
+                                    })
+                                }else{
+                                    chunk['Tech'] = obj.Tech;  
+                                    chunk['TechGroup'] = 'No group';
+                                    chunk['TechDesc'] = techData[obj.Tech]["Desc"];
+                                    chunk['TechGroupDesc'] = 'No group';
                                     dataT = unitData[group][param][obj.Tech];
-                                    tmp['Unit'] = jsonLogic.apply(rule, {...dataT});
-                                    pivotData.push(tmp);
-                                })
-                            }else{
-                                chunk['Tech'] = obj.Tech;  
-                                chunk['TechGroup'] = 'No group';
-                                chunk['TechDesc'] = techData[obj.Tech]["Desc"];
-                                chunk['TechGroupDesc'] = 'No group';
+    
+                                    chunk['Unit'] = jsonLogic.apply(rule, {...dataT});
+                                    pivotData.push(chunk);
+                                }
+    
+                                // console.log('rule ', rule)
+                                // console.log('unitData[group][param] ', unitData[group][param])
+                                // console.log('dataT ', dataT)
                                 dataT = unitData[group][param][obj.Tech];
-
-                                chunk['Unit'] = jsonLogic.apply(rule, {...dataT});
+                            }
+                            else{
+                                chunk['Tech'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Tech;  
+                                chunk['TechGroup'] = 'No group';
+                                chunk['TechDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Tech + " deleted from model";
+                                chunk['TechGroupDesc'] = 'No group';
+                                chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
                                 pivotData.push(chunk);
                             }
-
-                            // console.log('rule ', rule)
-                            // console.log('unitData[group][param] ', unitData[group][param])
-                            // console.log('dataT ', dataT)
-                            dataT = unitData[group][param][obj.Tech];
+    
                         }
-                        else{
-                            chunk['Tech'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Tech;  
-                            chunk['TechGroup'] = 'No group';
-                            chunk['TechDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Tech + " deleted from model";
-                            chunk['TechGroupDesc'] = 'No group';
-                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
+                        if(!obj.Tech){
                             pivotData.push(chunk);
                         }
+                        
+                    });
+                }
 
-                    }
-                    if(obj.Comm){
-                        
-                        //uslov dodan vk 18072924 ako smo izbrisali commodity a postoji u resulttima
-                        if(obj.Comm in commData){
-                            chunk['Comm'] = obj.Comm;
-                            chunk['CommDesc'] = commData[obj.Comm]["Desc"];
-                           
-                            dataC = unitData[group][param][obj.Comm];
-                            let rule = paramById[group][param]['unitRule'];
-                            chunk['Unit'] = jsonLogic.apply(rule, {...dataC});
-                        }
-                        else{
-                            chunk['Comm'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm;
-                            chunk['CommDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Comm + " deleted from model";
-                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
-                        }
-                    }
-
-                    if(obj.Stg){
-                        
-                        if(obj.Stg in stgData){
-                            chunk['Stg'] = obj.Stg;
-                            chunk['StgDesc'] = stgData[obj.Stg]["Desc"];
-                            dataS = unitData[group][param][obj.Stg];
-                            let rule = paramById[group][param]['unitRule'];
-                            chunk['Unit'] = jsonLogic.apply(rule, {...dataS});
-                        }
-                        else{
-                            chunk['Stg'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Stg;
-                            chunk['StgDesc'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Stg + " deleted from model";
-                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
-                        }
-                    }
-                    if(obj.Emi){
-                        
-                        if(obj.Emi in emiData){
-                            chunk['Emi'] = obj.Emi;
-                            chunk['EmiDesc'] = emiData[obj.Emi]["Desc"];
-                            dataE = unitData[group][param][obj.Emi];
-                            let rule = paramById[group][param]['unitRule'];
-                            chunk['Unit'] = jsonLogic.apply(rule, {...dataE});
-                        }
-                        else{
-                            chunk['Emi'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' +obj.Emi;
-                            chunk['EmiDesc'] =  '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> ' + obj.Emi+' deleted from model';
-                            chunk['Unit'] = '<i class="fa fa-exclamation-triangle danger" aria-hidden="true"></i> n/a';
-                        }
-                    }
-                    if(!obj.Tech){
-                        pivotData.push(chunk);
-                    }
-                    
-                });
 
             });
         });

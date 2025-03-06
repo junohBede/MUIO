@@ -225,6 +225,7 @@ export const UNITS =
     {id:"m2",name:"m<sup>2</sup>", group: "Area"},
     {id:"km2",name:"km<sup>2</sup>", group: "Area"},
     {id:"kkm2",name:"10<sup>3</sup>km<sup>2</sup>", group: "Area"},
+    {id:"kHa",name:"10<sup>3</sup>Ha", group: "Area"},
 
     {id:"m3",name:"m<sup>3</sup>", group: "Volume"},
     {id:"km3",name:"10<sup>3</sup>m<sup>3</sup>", group: "Volume"},
