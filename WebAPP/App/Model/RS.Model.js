@@ -103,8 +103,8 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 }); // minWidth: 75, maxWidth: 150,
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200, menu:false }); // minWidth: 75, maxWidth: 150,
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 , menu:false});
 
             let stgIds = [];
             $.each(stgs, function (id, stg) {
@@ -118,7 +118,7 @@ export class Model {
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue:  geteditorvalue
+                    geteditorvalue:  geteditorvalue, menu:false
                 });
             }.bind(this));
 

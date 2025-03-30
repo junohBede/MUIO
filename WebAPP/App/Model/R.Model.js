@@ -77,9 +77,9 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
-            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200,});
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200,menu:false });
+            columns.push({ text: 'Parameter', datafield: 'Param', pinned: true, editable: false, align: 'left', cellclassname: cellclass, minWidth: 75, maxWidth: 200, menu:false });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, minWidth: 75, maxWidth: 200,menu:false });
 
             columns.push({
                 text: '', datafield: 'value', cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
@@ -88,7 +88,8 @@ export class Model {
                 validation: validation,
                 cellsrenderer: cellsrenderer,
                 cellclassname: cellclass,
-                geteditorvalue:  geteditorvalue
+                geteditorvalue:  geteditorvalue,
+                menu:false
             });
 
             let srcGrid = {

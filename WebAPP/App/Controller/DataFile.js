@@ -238,6 +238,7 @@ export default class DataFile {
             $("#osy-updateCaseRun").hide();
             $("#osy-newCaseRun").hide();
 
+            $("#osy-runCaseDiv").hide();
             $("#osy-generateDataFile").hide();
             $("#osy-solver").hide();
             $("#osy-run").hide();
@@ -311,6 +312,8 @@ export default class DataFile {
                         Html.title(model.casename, model.title, caserunname);
                         Html.renderCases(model.cases);
                         $('#tabs a[href="#tabCases"]').tab('show');
+                        $("#osy-runCaseDiv").show();
+                        $("#osy-caseRunName").text(caserunname);
                         $('#osy-generateDataFile').show();
                         $("#osy-newCaseRun").show();
                         $(".DataFile").hide();
@@ -334,6 +337,8 @@ export default class DataFile {
                 .then(response => {
                     Message.clearMessages();
                     if (response.status_code == 'success') {
+                        $("#osy-runCaseDiv").show();
+                        $("#osy-caseRunName").text(caserunname);
                         $('#osy-generateDataFile').show();
                         model.cs = caserunname;
                         model.cases.push(caseData);
@@ -509,6 +514,7 @@ export default class DataFile {
             $("#osy-generateDataFile").hide();
             $("#osy-solver").hide();
             $("#osy-run").hide();
+            $("#osy-runCaseDiv").hide();
 
             $(".runOutput").hide();
             $(".lpOutput").hide();   
@@ -534,6 +540,8 @@ export default class DataFile {
                 } 
                 if (DataFile) {
                     $(".DataFile").show();
+                    $("#osy-runCaseDiv").show();
+                    $("#osy-caseRunName").text(model.cs);
                     $("#osy-generateDataFile").show();
    
                     Html.renderDataFile(DataFile, model);
@@ -541,8 +549,10 @@ export default class DataFile {
                 else if(!DataFile && ResultCSV.length == 0){
                     $(".DataFile").hide();
                     $(".Results").hide();
-                    $("#osy-generateDataFile").hide();
+                    //$("#osy-generateDataFile").hide();
 
+                    $("#osy-runCaseDiv").show();
+                    $("#osy-caseRunName").text(model.cs);
                     $("#osy-generateDataFile").show();
                     Message.smallBoxWarning("Run case message", "Please generate data file!", 3000);
                 }
@@ -593,13 +603,15 @@ export default class DataFile {
             var caserunname = $(this).attr('data-ps');
             $.SmartMessageBox({
                 title: "Confirmation Box!",
-                content: "You are about to delete <b class='danger'>" + caserunname + "</b> Model! Are you sure?",
+                content: "You are about to delete <b class='danger'>" + caserunname + "</b> case run! Are you sure?",
                 buttons: '[No][Yes]'
             }, function (ButtonPressed) {
                 if (ButtonPressed === "Yes") {
+                    Message.loaderStart('Deleteing case data...');
                     Base.deleteCaseRun(model.casename, caserunname)
                         .then(response => {
                             Message.clearMessages();
+                            Message.loaderEnd();
                             if (response.status_code == "success") {
                                 Message.bigBoxSuccess('Delete message', response.message, 3000);
                                 //REFRESH
@@ -621,6 +633,7 @@ export default class DataFile {
                                     $("#osy-newCaseRun").hide();
                         
                                     $("#osy-generateDataFile").hide();
+                                    $("#osy-runCaseDiv").hide();
                                     $("#osy-solver").hide();
                                     $("#osy-run").hide();
                         
@@ -684,9 +697,12 @@ export default class DataFile {
             });
             //console.log('batchRunCases ', batchRunCases)
             if(batchRunCases.length>1){
+                $("#osy-runCaseDiv").show();
+                $("#osy-caseRunName").text("BATCH RUN");
                 $('#osy-batchRun').show();
             }
             else{
+                $("#osy-runCaseDiv").hide();
                 $('#osy-batchRun').hide();
             }
           });

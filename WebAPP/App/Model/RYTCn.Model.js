@@ -38,9 +38,9 @@ export class Model {
             datafields.push({ name: 'TechDesc', type: 'string' });
             datafields.push({ name: 'ConDesc', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false, menu:false });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center', cellclassname: cellclass, filterable: true })
-            columns.push({ text: 'Constraint', datafield: 'Con', pinned: true, editable: false, align: 'center', cellclassname: cellclass, filterable: true })
+            columns.push({ text: 'Constraint', datafield: 'Con', pinned: true, editable: false, align: 'center', cellclassname: cellclass, filterable: false, menu:false })
 
 
             let validation = function (cell, value) {
@@ -98,7 +98,7 @@ export class Model {
                     //validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue: geteditorvalue
+                    geteditorvalue: geteditorvalue, menu:false
                 });
             }.bind(this));
 

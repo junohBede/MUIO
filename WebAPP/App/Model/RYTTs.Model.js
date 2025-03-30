@@ -74,21 +74,21 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable: false });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable: false, menu:false });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
-            columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center', filterable: false })
+            columns.push({ text: 'Timeslice', datafield: 'Ts', pinned: true, editable: false, align: 'center', filterable: true })
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: this.decimal, minWidth: 55, maxWidth: 110,
-
+                    sortable: false,
                     filterable: false,
                     groupable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue: geteditorvalue
+                    geteditorvalue: geteditorvalue, menu:false
                 });
             }.bind(this));
 

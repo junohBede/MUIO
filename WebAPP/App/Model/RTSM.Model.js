@@ -44,11 +44,11 @@ export class Model {
             datafields.push({ name: 'StgDesc', type: 'string' });
             datafields.push({ name: 'Value', type: 'number' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false, width: '20%'  });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false, width: '20%', menu:false  });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center', cellclassname: cellclass, width: '20%' });
             columns.push({ text: 'Storage', datafield: 'Stg', pinned: true, editable: false, align: 'center', cellclassname: cellclass, width: '20%'  });
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false, width: '10%'  });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false, width: '10%'  });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false, width: '10%', menu:false  });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,sortable:false, filterable: false, width: '10%' , menu:false });
 
 
 
@@ -103,7 +103,7 @@ export class Model {
             validation: validation,
             cellsrenderer: cellsrenderer,
             cellclassname: cellclass,
-            geteditorvalue: geteditorvalue  });
+            geteditorvalue: geteditorvalue, menu:false  });
 
             // $.each(years, function (id, year) {
             //     datafields.push({ name: year, type: 'number' });

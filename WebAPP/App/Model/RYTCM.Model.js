@@ -46,11 +46,11 @@ export class Model {
             datafields.push({ name: 'TechDesc', type: 'string' });
             datafields.push({ name: 'CommDesc', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false  });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false, menu:false  });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center', cellclassname: cellclass });
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center', cellclassname: cellclass  });
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false  });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false  });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false, menu:false  });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, sortable:false, filterable: false, menu:false  });
 
 
             let validation = function (cell, value) {
@@ -107,7 +107,7 @@ export class Model {
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue: geteditorvalue
+                    geteditorvalue: geteditorvalue, menu:false
                 });
             }.bind(this));
 

@@ -2038,9 +2038,10 @@ class DataFile(Osemosys):
                 #     proc.kill()
                 #     outs, errs = proc.communicate()
 
+                #cbc_out = subprocess.run('cbc ' + lpfile +' -presolve off -postsolve on -logLevel 3 solve -printing all -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
+                # prin
                 cbc_out = subprocess.run('cbc ' + lpfile +' solve -printing all -solu '  + resultfile, cwd=cbcfolder,  capture_output=True, text=True, shell=True)
-
-
+                # -printing all prints all constraints to result.txt
                 print("SOLUTION DONE! --- %s seconds --- %s" % (time.time() - start_time, caserunname))
                 txtOut = txtOut + ("Solution time {:0.2f}s;{}".format(time.time() - start_time, '\n'))
                 ####output to lg file .log i .txt with errors
@@ -2131,73 +2132,7 @@ class DataFile(Osemosys):
             tech_list = self.getTechNames()
             start_year = year_list[0]
 
-
             data = self.parseDataFile(data_file)
-
-            # with open(data_file, 'r') as f:
-            #     parsing = False
-            #     for line in f:
-            #         line = line.rstrip().replace('\t', ' ')
-            #         if line.startswith(";"):
-            #             parsing = False
-            #         if parsing:
-            #             if line.startswith('['):
-            #                 element = line.split(',')
-            #                 region = element[0][1:]
-            #                 tech = element[1]
-            #                 fuel_emi = element[2]
-                
-            #             elif line.startswith(start_year):
-            #                 years = line.rstrip(':= ;\n').split(' ')[0:]
-            #                 years = [i.strip(':=') for i in years]
-                        
-            #             else:
-            #                 values = line.rstrip().split(' ')[1:]
-            #                 if param_current in ('OperationalLife', 'DiscountRateIdv'):
-            #                     if firstRow:
-            #                         techs = line.rstrip(':= ;\n').split(' ')[0:]
-            #                         firstRow=False
-            #                     else:
-            #                         region = line.split(' ')[0]
-            #                         for i, tech in enumerate(techs):
-            #                             data[param_current].append(tuple([ region, tech, values[i]]))
-            #                 if param_current in ('AccumulatedAnnualDemand', 'SpecifiedDemandProfile'):
-            #                     timeslice = line.split(' ')[0]
-            #                     for i, year in enumerate(years):
-            #                         data[param_current].append(tuple([region, tech, year, timeslice, values[i]]))
-            #                 if param_current in ('OutputActivityRatio','InputActivityRatio','EmissionActivityRatio'):
-            #                     mode = line.split(' ')[0]
-            #                     for i, year in enumerate(years):
-            #                         data[param_current].append(tuple([ region, fuel_emi, tech, year, mode, values[i]]))
-            #                 if param_current in ('YearSplit'):
-            #                     timeslice = line.split(' ')[0]
-            #                     for i, year in enumerate(years):
-            #                         data[param_current].append(tuple([ region, year, timeslice, values[i]]))
-            #         if line.startswith(
-            #             (
-            #             'param OutputActivityRatio',
-            #             'param InputActivityRatio', 
-            #             'param EmissionActivityRatio',
-            #             'param OperationalLife',
-            #             'param DiscountRateIdv',
-            #             'param YearSplit'
-            #             )):
-						
-            #             param_current = line.split(' ')[1]
-            #             #ovo sam izbacii da ne bi morali kod kreiranje dataframe raditi ovo:
-            #             # df_IAR = pd.DataFrame(data['InputActivityRatio'])
-            #             # headers = df_IAR.iloc[0]
-            #             # df_IAR = pd.DataFrame(df_IAR.values[1:], columns=headers )
-            #             # df_IAR['InputActivityRatio'] = df_IAR['InputActivityRatio'].astype(float)
-            #             #ovaj dio treba popraviti i kod validacijskih skripti
-
-            #             # params = Config.PARAMETERS_C[param_current].copy()
-            #             # params.append(param_current)
-            #             data[param_current] = []
-            #             #data[param_current].append(tuple(params))
-            #             parsing = True
-            #             if line.startswith(('param OperationalLife')) or line.startswith(('param DiscountRateIdv')):
-            #                 firstRow=True
 
             try:
                 os.makedirs(os.path.join(base_folder, 'csv'))
@@ -2206,21 +2141,14 @@ class DataFile(Osemosys):
             
             #parsanje result.txt
             params = []
-            
-            # Read only the header row
-            # header_df = pd.read_csv(results_file, sep='\t', nrows=0)
-            # headers = header_df.columns.tolist()
-            # print(headers)
+            df = pd.read_csv(results_file, sep='\t')            
 
-            df = pd.read_csv(results_file, sep='\t')
-            # get optimal value
+            ###################################### parse optimal value from result.txt
             # Extract the optimal value from the header line
             optimal_value_header = df.columns[0]
             if 'Optimal - objective value' in optimal_value_header:
                 # Extract the value from the header line
                 optimal_value = float(optimal_value_header.split()[-1])
-
-            print('optimal_value ',optimal_value)
 
             ov = {
             "r": ['RE1'],
@@ -2229,26 +2157,37 @@ class DataFile(Osemosys):
 
             #load data into a DataFrame object:
             dfOV = pd.DataFrame(ov)
-
-            print(dfOV) 
             dfOV.to_csv(os.path.join(base_folder, 'csv', 'ObjectiveValue.csv'), index=None)
-                                                       
+            ######################################## end optimal value parse    
+            #                                      
             df.columns = ['temp']
-            print(df.head())
 
             df['temp'] = df['temp'].str.lstrip(' *\n\t')
-            
+           
+           
             if len(df) > 0:
                 #ovdje parsa result.txt file
-                df[['temp','value']] = df['temp'].str.split(')', expand=True)
+                df[['temp','value']] = df['temp'].str.split(')', expand=True)                
+
                 df = df.applymap(lambda x: x.strip() if isinstance(x,str) else x)
+
                 #error when moved to ython 3.11, Columns must have smae length as key
                 # df['value'] = df['value'].str.split(' ', expand=True)
-                df['value'] = df['value'].str.split(' ', expand=True)[0]
+                # potrebno je extract i dual values
+                #df['value'] = df['value'].str.split(' ', expand=True)[0]
+                # print(df[['temp','value']].head())
+                # print(df['temp'].loc[6853]) 
+                # print(df['value'].loc[6853]) 
+
+                #df[['primal','dual']] = df['value'].str.split('\t', expand=True)
+                df[['value','dual']] = df['value'].str.split(expand=True)
+                print(df[['value','dual']].head())
+
                 df[['parameter','id']] = df['temp'].str.split('(', expand=True)
                 df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]
                 df = df.drop('temp', axis=1)
                 df['value'] = df['value'].astype(float).round(4)
+                df['dual'] = df['dual'].astype(float).round(4)
 
                 #variables that are output form solver 19
                 params = df.parameter.unique()
@@ -2266,13 +2205,21 @@ class DataFile(Osemosys):
                         df_p[Config.VARIABLES_C[each]] = df_p['id'].str.split(',',expand=True)
 
                         result_cols = Config.VARIABLES_C[each].copy()
-                        result_cols.append('value')
+
+                        if each in ('EBb4_EnergyBalanceEachYear4_ICR', 'E8_AnnualEmissionsLimit', 'UDC1_UserDefinedConstraintInequality', 'UDC2_UserDefinedConstraintEquality'):
+                            result_cols.append('dual')
+                        else:
+                            result_cols.append('value')
                         #result_cols.append(each)
                         df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
+                        print(df_p.head())
                         all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
 
                         #napravi csv
-                        all_params[each] = all_params[each].rename(columns={'value':each})
+                        if each in ('EBb4_EnergyBalanceEachYear4_ICR', 'E8_AnnualEmissionsLimit', 'UDC1_UserDefinedConstraintInequality', 'UDC2_UserDefinedConstraintEquality'):
+                            all_params[each] = all_params[each].rename(columns={'dual':each})
+                        else:
+                            all_params[each] = all_params[each].rename(columns={'value':each})
                         all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
 
                 ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########

@@ -425,14 +425,23 @@ export default class Pivot {
             var viewname = $("#osy-viewname").val();
             var desc = $("#osy-viewdesc").val();
             let param = model.param;
+            let group = model.group;
             let viewId = DefaultObj.getId('VIEW');
 
             app.engine.fields.getField('Unit').isContentHtml = true;
-            console.log('param ', param)
+            console.log('param ', param, model.group)
             //ako nije demand jer ne zavisi od T
             if(param == 'D'){
                 app.engine.fields.getField('Comm').isContentHtml = true;
                 app.engine.fields.getField('Comm Desc').isContentHtml = true;
+            }
+            else if(group == "RYC"){
+                app.engine.fields.getField('Comm').isContentHtml = true;
+                app.engine.fields.getField('Comm Desc').isContentHtml = true;
+            }
+            else if(group == "RYE"){
+                app.engine.fields.getField('Emi').isContentHtml = true;
+                app.engine.fields.getField('Emi Desc').isContentHtml = true;
             }
             else{
                 app.engine.fields.getField('Tech').isContentHtml = true;

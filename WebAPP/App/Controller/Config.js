@@ -42,9 +42,9 @@ export default class Config {
         let $divParamGrid = $('#osy-gridParam');
         let $divVarGrid = $('#osy-gridVar');
         var daParamGrid = new $.jqx.dataAdapter(model.srcParamGrid);        
-        Grid.Grid($divParamGrid, daParamGrid, model.columnsParam, true)
+        Grid.Grid($divParamGrid, daParamGrid, model.columnsParam, {filterable: true, sortable:true})
         var daVarGrid = new $.jqx.dataAdapter(model.srcVarGrid);        
-        Grid.Grid($divVarGrid, daVarGrid, model.columnsVar, true)
+        Grid.Grid($divVarGrid, daVarGrid, model.columnsVar, {filterable: true, sortable:true})
     }
 
     static refreshPage(casename){

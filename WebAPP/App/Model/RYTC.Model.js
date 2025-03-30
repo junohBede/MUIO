@@ -43,7 +43,7 @@ export class Model {
             datafields.push({ name: 'TechDesc', type: 'string' });
             datafields.push({ name: 'CommDesc', type: 'string' });
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left' });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', filterable:false, menu:false });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center' })
             columns.push({ text: 'Commodity', datafield: 'Comm', pinned: true, editable: false, align: 'center' })
 
@@ -95,11 +95,13 @@ export class Model {
                 columns.push({
                     text: year, datafield: year, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd3',
                     groupable: false,
+                    filterable:false,
+                    sortable: false,
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue: geteditorvalue
+                    geteditorvalue: geteditorvalue, menu:false
                 });
             });
 

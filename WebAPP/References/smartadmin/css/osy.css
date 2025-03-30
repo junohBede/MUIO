@@ -862,7 +862,10 @@ li {
 
 
 
-.jqx-listitem-state-selected-material, .jqx-menu-item-selected-material, .jqx-tree-item-selected-material, .jqx-calendar-cell-selected-material, .jqx-grid-cell-selected-material, .jqx-menu-vertical-material .jqx-menu-item-top-selected-material, .jqx-grid-selectionarea-material, .jqx-input-button-header-material, .jqx-input-button-innerHeader-material {
+.jqx-listitem-state-selected-material, 
+.jqx-menu-item-selected-material, .jqx-tree-item-selected-material, 
+.jqx-calendar-cell-selected-material, .jqx-grid-cell-selected-material, 
+jqx-menu-vertical-material .jqx-menu-item-top-selected-material, .jqx-grid-selectionarea-material, .jqx-input-button-header-material, .jqx-input-button-innerHeader-material {
     color: whitesmoke!important;
     background-color: var(--second-color) !important;
 }
@@ -871,6 +874,12 @@ li {
 }
 .jqx-input-label-material {
     color: var(--main-color) !important;
+}
+
+.nav-tabs>li.active>a {
+    -webkit-box-shadow: 0 -2px 0 var(--second-color)!important;
+    -moz-box-shadow: 0 -2px 0 var(--second-color)!important;
+    box-shadow: 0 -2px 0 var(--second-color)!important;
 }
 
 
@@ -907,4 +916,8 @@ li {
 /* Customize the dropdown list */
 .select2-container .select2-dropdown {
     border-radius: 0px; /* Remove border-radius */
+}
+
+.jqx-grid-column-filterbutton-bootstrap {
+    display: none !important;
 }

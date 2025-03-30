@@ -32,8 +32,8 @@ export class Model {
             datafields.push({ name: 'ScDesc', type: 'string' });
 
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true });
-            columns.push({ text: 'Dailytimebracket', datafield: 'Dtb', pinned: true, editable: false, align: 'center', cellclassname: cellclass, enabletooltips: true })
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, menu:false });
+            columns.push({ text: 'Dailytimebracket', datafield: 'Dtb', pinned: true, editable: false, align: 'center', cellclassname: cellclass, enabletooltips: true, menu:false })
 
             let validation = function (cell, value) {
                 if (value < 0) {
@@ -114,7 +114,7 @@ export class Model {
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue: geteditorvalue
+                    geteditorvalue: geteditorvalue, menu:false
                 });
             }.bind(this));
 

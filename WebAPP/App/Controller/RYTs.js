@@ -49,7 +49,7 @@ export default class RYTs {
 
         let $divGrid = $('#osy-gridRYTs');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, { sortable:true});
+        Grid.Grid($divGrid, daGrid, model.columns, { sortable:true, filterable:true});
 
         if (model.scenariosCount > 1) {
             Html.lblScenario( model.scenariosCount);

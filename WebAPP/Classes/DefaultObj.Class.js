@@ -186,8 +186,8 @@ export class DefaultObj{
                 "Stg":id,
                 "Desc": "Default storage",
                 "UnitId": "PJ",
-                "TTS": "TEC_0",
-                "TFS": "TEC_0",
+                "TTS": "",
+                "TFS": "",
                 "Operation": "Yearly"
             }
         ];
@@ -219,7 +219,7 @@ export class DefaultObj{
         }else{
             id = this.getId('CO');
         }
-        let emptyArray = ['TEC_0'];
+        let emptyArray = [];
         let defaultObj = [
             {
                 "ConId": id,

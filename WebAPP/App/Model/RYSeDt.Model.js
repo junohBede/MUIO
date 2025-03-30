@@ -76,10 +76,10 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 75, maxWidth: 150, filterable: false });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', minWidth: 75, maxWidth: 150, filterable: false, menu:false });
             columns.push({ text: 'Season', datafield: 'Se', pinned: true, editable: false, align: 'center',minWidth: 75, maxWidth: 150 });
-            columns.push({ text: 'Day type', datafield: 'Dt', pinned: true, editable: false, align: 'center',minWidth: 55, maxWidth: 90, filterable: false });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,minWidth: 55, maxWidth: 90, filterable: false });
+            columns.push({ text: 'Day type', datafield: 'Dt', pinned: true, editable: false, align: 'center',minWidth: 55, maxWidth: 90, filterable: false, menu:false });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,minWidth: 55, maxWidth: 90, filterable: false, menu:false });
             
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
@@ -92,7 +92,7 @@ export class Model {
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue:geteditorvalue
+                    geteditorvalue:geteditorvalue, menu:false
                 });
             }.bind(this));
 

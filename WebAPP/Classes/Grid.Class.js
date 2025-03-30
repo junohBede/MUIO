@@ -295,6 +295,7 @@ export class Grid {
             // columnsheight: 20,
             theme: this.theme(),
             source: daTs,
+            filterable: true,
             editable: true,
             selectionmode: 'none',
             enablehover: false,
@@ -303,18 +304,19 @@ export class Grid {
             // pageable: true,
             // pagesize: 10,
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
+            autoshowcolumnsmenubutton: false,
             columns: [
                 { text: 'TsId', datafield: 'TsId', hidden: true },
                 { text: 'SeId', datafield: 'SeId', hidden: true },
                 { text: 'DtId', datafield: 'DtId', hidden: true },
                 { text: 'DtbId', datafield: 'DtbId', hidden: true },
                 { text: 'Year split name', datafield: 'Ts', width: '15%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '30%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Season', datafield: 'SE', width: '15%',cellsrenderer: cellsrendererSeasons, initeditor:initeditor, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlSeasons,  align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Day type', datafield: 'DT', width: '15%', cellsrenderer: cellsrendererDaytypes,  initeditor:initeditor,geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDatypes,  align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Daily time', datafield: 'DTB', width: '15%', cellsrenderer: cellsrendererDailytimebrackets,  initeditor:initeditor,geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDilytimebrackets,  align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Description', datafield: 'Desc', width: '30%', align: 'center', cellsalign: 'left',sortable: false, menu:false },  
+                { text: 'Season', datafield: 'SE', width: '15%',cellsrenderer: cellsrendererSeasons, initeditor:initeditor, geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlSeasons,  align: 'center', cellsalign: 'center', sortable: false, menu:false },
+                { text: 'Day type', datafield: 'DT', width: '15%', cellsrenderer: cellsrendererDaytypes,  initeditor:initeditor,geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDatypes,  align: 'center', cellsalign: 'center', sortable: false, menu:false },
+                { text: 'Daily time', datafield: 'DTB', width: '15%', cellsrenderer: cellsrendererDailytimebrackets,  initeditor:initeditor,geteditorvalue: getEditorValue, columntype: 'dropdownlist', createeditor: ddlDilytimebrackets,  align: 'center', cellsalign: 'center', sortable: false, menu:false },
 
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTs" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add year split</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTs" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add year split</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false, menu:false },
             ]
         });
     }
@@ -405,6 +407,7 @@ export class Grid {
         var initeditor = function (row, cellvalue, editor, celltext, pressedkey) {
             // set the editor's current value. The callback is called each time the editor is displayed.
             var items = editor.jqxDropDownList('getItems');
+            console.log('items ', items)
             editor.jqxDropDownList('uncheckAll');
             if (Array.isArray(cellvalue)) {
                 var values = cellvalue;
@@ -522,27 +525,29 @@ export class Grid {
             theme: this.theme(),
             source: this.daTechs,
             editable: true,
+            filterable: true,
             selectionmode: 'none',
             showsortcolumnbackground: false,
             enablehover: false,
             sortable: true,
+            autoshowcolumnsmenubutton: false,
             // pageable: true,
             // pagesize: 20,
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             
             columns: [
                 //{ text: 'techId', datafield: 'TechId', hidden: true },
-                { text: 'Technology', datafield: 'Tech', width: '8%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '15%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false },
-                { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false },
-                { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '9%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue ,sortable: false},
-                { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '9%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: 'Emission Activity Ratio', datafield: 'EAR', width: '9%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTech" class="btn btn-white btn-osy" ><i class="fa fa-plus fa-lg"></i>Add technology</span>', datafield: 'TechId', width: '9%', cellsrenderer: deleteBtnRender, editable: false, sortable: false },
+                { text: 'Technology', datafield: 'Tech', width: '8%', align: 'center', cellsalign: 'left', validation: validation_1, fiterable: true },
+                { text: 'Description', datafield: 'Desc', width: '15%', align: 'center', cellsalign: 'left',sortable: false, menu:false },
+                { text: 'Technology group', datafield: 'TG', width: '7%',  cellsrenderer: cellsrendererTechGroups, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlTechGroups, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false, menu:false },
+                { text: 'Unit of capacity', datafield: 'CapUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false, menu:false },
+                { text: 'Unit of activity', datafield: 'ActUnitId', width: '7%', columntype: 'dropdownlist', rendered: tooltiprenderer, createeditor: ddlUnits, align: 'center', cellsalign: 'center',sortable: false, menu:false },
+                { text: 'Input Activity Ratio', datafield: 'IAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false, menu:false },
+                { text: 'Output Activity Ratio', datafield: 'OAR', width: '10%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false, menu:false },
+                { text: 'Input To New Capacity Ratio', datafield: 'INCR', width: '9%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue ,sortable: false, menu:false},
+                { text: 'Input To Total Capacity Ratio', datafield: 'ITCR', width: '9%', cellsrenderer: cellsrendererComms, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false, menu:false },
+                { text: 'Emission Activity Ratio', datafield: 'EAR', width: '9%', cellsrenderer: cellsrendererEmis, rendered: tooltiprenderer, columntype: 'dropdownlist', createeditor: ddlEmis, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue,sortable: false, menu:false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTech" class="btn btn-white btn-osy" ><i class="fa fa-plus fa-lg"></i>Add technology</span>', datafield: 'TechId', width: '9%', cellsrenderer: deleteBtnRender, editable: false, sortable: false, menu:false },
             ]
    
         })
@@ -583,17 +588,19 @@ export class Grid {
             autoheight: true,
             // columnsheight: 20,
             theme: this.theme(),
+            filterable: true,
             source: daTechGroup,
             editable: true,
             selectionmode: 'none',
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
+            autoshowcolumnsmenubutton: false,
             columns: [
                 // { text: 'TechGroupId', datafield: 'TechGroupId', hidden: true },
                 { text: 'Technology group name', datafield: 'TechGroup', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left', sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTechGroup" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add group</span>', datafield: 'TechGroupId', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left', sortable: false, menu:false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addTechGroup" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add group</span>', datafield: 'TechGroupId', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false, menu:false },
             ]
         });
     }
@@ -651,6 +658,7 @@ export class Grid {
             //autoheight: true,
             // columnsheight: 20,
             height:height,
+            filterable:true,
             theme: this.theme(),
             source: daComms,
             editable: true,
@@ -658,14 +666,15 @@ export class Grid {
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
+            autoshowcolumnsmenubutton: false,
             // pageable: true,
             // pagesize: 10,
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
-                { text: 'Commodity name', datafield: 'Comm', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addComm" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add</span>', datafield: 'CommId', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: 'Commodity name', datafield: 'Comm', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1, filterable: true },
+                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false,menu:false },
+                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false, menu:false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addComm" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add</span>', datafield: 'CommId', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false, menu:false },
             ]
         });
     }
@@ -734,18 +743,19 @@ export class Grid {
             // columnsheight: 20,
             theme: this.theme(),
             source: daEmi,
+            filterable:true,
             editable: true,
             selectionmode: 'none',
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
-            
+            autoshowcolumnsmenubutton: false,
             columns: [
                 { text: 'EmisId', datafield: 'EmisId', hidden: true },
                 { text: 'Emission name', datafield: 'Emis', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false },
+                { text: 'Description', datafield: 'Desc', width: '50%', align: 'center', cellsalign: 'left',sortable: false, menu:false },
+                { text: 'Unit', datafield: 'UnitId', width: '20%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false, menu:false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addEmis" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add emission</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false,sortable: false, menu:false },
             ]
         });
     }
@@ -841,6 +851,7 @@ export class Grid {
             width: '100%',
             autoheight: true,
             // columnsheight: 20,
+            filterable:true,
             theme: this.theme(),
             source: daStg,
             editable: true,
@@ -850,18 +861,19 @@ export class Grid {
             showsortcolumnbackground: false,
             pageable: false,
             pagesize: 10,
+            autoshowcolumnsmenubutton: false,
             //pagesizeoptions: ['10', '25', '50', '100', '250', '500', '750', '1000'],
             columns: [
                 { text: 'StgId', datafield: 'StgId', hidden: true },
                 { text: 'Storage name', datafield: 'Stg', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '20%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Unit', datafield: 'UnitId', width: '10%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false },
+                { text: 'Description', datafield: 'Desc', width: '20%', align: 'center', cellsalign: 'left',sortable: false, menu:false },
+                { text: 'Unit', datafield: 'UnitId', width: '10%', columntype: 'dropdownlist', createeditor: ddlEditor, align: 'center', cellsalign: 'center',sortable: false, menu:false },
                 
-                { text: 'Technology to storage', datafield: 'TTS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist', initeditor:initeditor,createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Technology from storage', datafield: 'TFS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist',initeditor:initeditor, createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false },
+                { text: 'Technology to storage', datafield: 'TTS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist', initeditor:initeditor,createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false, menu:false },
+                { text: 'Technology from storage', datafield: 'TFS', width: '15%',cellsrenderer: cellsrendererTechs, columntype: 'dropdownlist',initeditor:initeditor, createeditor: ddlTechs, geteditorvalue: getEditorValue, align: 'center', cellsalign: 'center', sortable: false, menu:false },
 
-                { text: 'Storage operations', datafield: 'Operation', width: '10%', columntype: 'dropdownlist', createeditor: ddlStgOperations, align: 'center', cellsalign: 'center',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addStg" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add storage</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: 'Storage operations', datafield: 'Operation', width: '10%', columntype: 'dropdownlist', createeditor: ddlStgOperations, align: 'center', cellsalign: 'center',sortable: false, menu:false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addStg" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add storage</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false, menu:false },
             ]
         });
     }
@@ -900,6 +912,7 @@ export class Grid {
             width: '100%',
             autoheight: true,
             // columnsheight: 20,
+            filterable:true,
             theme: this.theme(),
             source: daScenario,
             editable: true,
@@ -907,11 +920,12 @@ export class Grid {
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
+            autoshowcolumnsmenubutton: false,
             columns: [
                 { text: 'ScenarioId', datafield: 'ScenarioId', hidden: true },
                 { text: 'Scenario name', datafield: 'Scenario', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addScenario" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add scenario</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false },
+                { text: 'Description', datafield: 'Desc', width: '70%', align: 'center', cellsalign: 'left',sortable: false, menu:false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addScenario" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add scenario</span>', datafield: 'Delete', width: '10%', cellsrenderer: cellsrendererbutton, editable: false, sortable: false, menu:false },
             ]
         });
     }
@@ -1024,6 +1038,7 @@ export class Grid {
             width: '100%',
             autoheight: true,
             // columnsheight: 20,
+            filterable:true,
             theme: this.theme(),
             source: this.daConstraint,
             editable: true,
@@ -1031,30 +1046,31 @@ export class Grid {
             enablehover: false,
             sortable:true,
             showsortcolumnbackground: false,
+            autoshowcolumnsmenubutton: false,
             columns: [
                 { text: 'ConId', datafield: 'ConId', hidden: true },
                 { text: 'Constraint name', datafield: 'Con', width: '20%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '40%', align: 'center', cellsalign: 'left',sortable: false },
-                { text: 'Tag', datafield: 'Tag', displayfield: 'TagName', width: '10%', columntype: 'dropdownlist', createeditor: ddlTags, align: 'center', cellsalign: 'center', sortable: false },
-                { text: 'Technology', datafield: 'CM', width: '20%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue, sortable: false },
-                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addConstraint" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add constraint</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton, sortable: false },
+                { text: 'Description', datafield: 'Desc', width: '40%', align: 'center', cellsalign: 'left',sortable: false, menu:false },
+                { text: 'Tag', datafield: 'Tag', displayfield: 'TagName', width: '10%', columntype: 'dropdownlist', createeditor: ddlTags, align: 'center', cellsalign: 'center', sortable: false, menu:false },
+                { text: 'Technology', datafield: 'CM', width: '20%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue, sortable: false, menu:false },
+                { text: '<span style="padding:10px; width:100%; border:none" id="osy-addConstraint" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add constraint</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton, sortable: false, menu:false },
             ]
         });
     }
 
-    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true, sortable= false, autoshowfiltericon=false}={}) {
+    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true, sortable= false, autoshowfiltericon=true, autoheight= false, height = $(window).height() - 275}={}) {
         //setting page size
         // let pagesize = JSON.parse(localStorage.getItem("osy-pagesize"));
         // if(!pagesize){
         //     pagesize = '20';
         // }
 
-        let height = $(window).height() - 255;
+        //let height = $(window).height() - 255;
         $div.jqxGrid({
             theme: this.theme(),
             width: '100%',
             //height:71+count*26,
-            //autoheight: true,
+            autoheight: autoheight,
             height: height,
             autoshowloadelement: true,
             showdefaultloadelement: true,
@@ -1070,7 +1086,7 @@ export class Grid {
             // pagesize: pagesize,
             // pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
             // pagermode: "simple",
-            filtermode: 'excel',
+            //filtermode: 'excel',
             enableellipsis: true,
             enablekeyboarddelete: false,
             editable: editable,
@@ -1081,6 +1097,7 @@ export class Grid {
             editmode: 'selectedcell',
             showsortcolumnbackground: false,
             showfiltercolumnbackground: false,
+            autoshowcolumnsmenubutton: false,
             scrollmode: 'logical',
             // virtualmode: true,
             // rendergridrows: rendergridrows,

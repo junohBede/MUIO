@@ -50,7 +50,7 @@ export default class RS {
 
         let $divGrid = $('#osy-gridRS');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false})
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false, autoheight:true})
 
         if (model.scenariosCount > 1) {
             Html.lblScenario( model.scenariosCount);

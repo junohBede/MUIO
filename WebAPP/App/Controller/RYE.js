@@ -50,7 +50,7 @@ export default class RYE {
 
         let $divGrid = $('#osy-gridRYE');
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false});
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false,filterable: true, sortable:true});
 
         if (model.scenariosCount > 1) {
             Html.lblScenario( model.scenariosCount);

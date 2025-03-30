@@ -49,7 +49,7 @@ export default class R {
         let $divChart = $('#osy-chartR');
 
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false})
+        Grid.Grid($divGrid, daGrid, model.columns, {pageable: false, autoheight:true})
 
         if (model.scenariosCount>1){
             Html.lblScenario( model.scenariosCount);

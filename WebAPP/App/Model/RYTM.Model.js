@@ -97,10 +97,10 @@ export class Model {
                 return editor.val() == null ? null :  editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false, minWidth: 75, maxWidth: 200 });
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, filterable: false, minWidth: 75, maxWidth: 200, menu:false });
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'center', cellclassname: cellclass, minWidth: 75, maxWidth: 200 });
-            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,  filterable: false, minWidth: 55, maxWidth: 110, });
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,  filterable: false, groupable:false, minWidth: 75, maxWidth: 110, });
+            columns.push({ text: 'MoO', datafield: 'MoId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass,  filterable: false, minWidth: 55, maxWidth: 110, menu:false});
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, sortable:false, filterable: false, groupable:false, minWidth: 75, maxWidth: 110, menu:false });
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
@@ -114,7 +114,7 @@ export class Model {
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue: geteditorvalue
+                    geteditorvalue: geteditorvalue, menu:false
                 });
             }.bind(this));
 

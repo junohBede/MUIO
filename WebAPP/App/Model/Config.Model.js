@@ -63,14 +63,14 @@ export class Model {
         datafieldsParam.push({ name: 'unitRule' });   
 
         columnsParam.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true})
-        columnsParam.push({ text: 'PARAMETER GROUP', datafield: 'groupName', editable: false, align: 'left', width: '20%'})
-        columnsParam.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true})
+        columnsParam.push({ text: 'PARAMETER GROUP', datafield: 'groupName', editable: false, align: 'left', width: '20%', menu: false})
+        columnsParam.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true, menu: false, sortable:false})
         columnsParam.push({ text: 'PARAMETER NAME', datafield: 'value', editable: false, align: 'left', width: '40%'})
-        columnsParam.push({ text: 'DEFAULT VALUE', datafield: 'default', align: 'right', cellsalign: 'right', width: '15%', columntype: 'numberinput', initeditor:initeditor, cellsformat: 'd5'})
-        columnsParam.push({ text: 'ACTIVE', datafield: 'enable', columntype: 'checkbox', align: 'center',  hidden: true}),
-        columnsParam.push({ text: 'menu', datafield: 'menu', editable: false, align: 'left',  hidden: true}),
-        columnsParam.push({ text: 'UNIT', datafield: 'unit', editable: false, align: 'center', cellsalign: 'center', width: '15%'}),
-        columnsParam.push({ text: 'UNIT RULE', datafield: 'Unit rule',  align: 'center', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false  })
+        columnsParam.push({ text: 'DEFAULT VALUE', datafield: 'default', align: 'right', cellsalign: 'right', width: '15%', columntype: 'numberinput', sortable:false, initeditor:initeditor, cellsformat: 'd5', menu: false})
+        columnsParam.push({ text: 'ACTIVE', datafield: 'enable', columntype: 'checkbox', align: 'center',  hidden: true, menu: false, sortable:false}),
+        columnsParam.push({ text: 'menu', datafield: 'menu', editable: false, align: 'left',  hidden: true, menu: false, sortable:false}),
+        columnsParam.push({ text: 'UNIT', datafield: 'unit', editable: false, align: 'center', cellsalign: 'center', width: '15%', menu: false, sortable:false}),
+        columnsParam.push({ text: 'UNIT RULE', datafield: 'Unit rule',  align: 'center', width: '10%',  cellsrenderer: cellsrendererbutton, editable:false, sortable:false, menu: false  })
 
         let srcParamGrid = {
             datatype: "json",
@@ -108,13 +108,13 @@ export class Model {
         datafieldsVar.push({ name: 'unit', type:'string' });    
         datafieldsVar.push({ name: 'unitRule' });   
 
-        columnsVar.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true})
-        columnsVar.push({ text: 'VARIABLE GROUP', datafield: 'groupName', editable: false, align: 'left', width: '25%'})
-        columnsVar.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true})
+        columnsVar.push({ text: 'groupId', datafield: 'groupId', editable: false, align: 'left',  hidden: true, sortable:false})
+        columnsVar.push({ text: 'VARIABLE GROUP', datafield: 'groupName', editable: false, align: 'left', width: '25%', menu: false})
+        columnsVar.push({ text: 'id', datafield: 'id', editable: false, align: 'left',  hidden: true, sortable:false})
         columnsVar.push({ text: 'VARIABLE NAME', datafield: 'value', editable: false, align: 'left', width: '50%'});
-        columnsVar.push({ text: 'name', datafield: 'name', editable: false, align: 'left',  hidden: true})
-        columnsVar.push({ text: 'UNIT', datafield: 'unit', editable: false, align: 'center', cellsalign: 'center', width: '15%'}),
-        columnsVar.push({ text: 'UNIT RULE', datafield: 'Unit rule',  align: 'center', width: '10%',  cellsrenderer: cellsrendererbuttonVar, editable:false  })
+        columnsVar.push({ text: 'name', datafield: 'name', editable: false, align: 'left',  hidden: true, menu: false, sortable:false})
+        columnsVar.push({ text: 'UNIT', datafield: 'unit', editable: false, align: 'center', cellsalign: 'center', width: '15%', menu: false, sortable:false}),
+        columnsVar.push({ text: 'UNIT RULE', datafield: 'Unit rule',  align: 'center', width: '10%',  cellsrenderer: cellsrendererbuttonVar, editable:false, sortable:false, menu: false  })
 
         let srcVarGrid = {
             datatype: "json",

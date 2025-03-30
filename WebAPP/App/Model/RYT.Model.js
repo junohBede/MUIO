@@ -88,9 +88,9 @@ export class Model {
                 return editor.val() == null ? null : editor.val();
             }
 
-            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: false}); 
+            columns.push({ text: 'Scenario', datafield: 'Sc', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: false, menu:false}); 
             columns.push({ text: 'Technology', datafield: 'Tech', pinned: true, editable: false, align: 'left', cellclassname: cellclass, enabletooltips: true, filterable: true});
-            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false });
+            columns.push({ text: 'Unit', datafield: 'UnitId', pinned: true, editable: false, align: 'center', cellsalign: 'center', cellclassname: cellclass, filterable: false, sortable: false,menu:false });
 
             $.each(years, function (id, year) {
                 datafields.push({ name: year, type: 'number' });
@@ -103,7 +103,8 @@ export class Model {
                     validation: validation,
                     cellsrenderer: cellsrenderer,
                     cellclassname: cellclass,
-                    geteditorvalue:  geteditorvalue
+                    geteditorvalue:  geteditorvalue,
+                    menu:false
                 });
             }.bind(this));
 
