@@ -2181,7 +2181,7 @@ class DataFile(Osemosys):
 
                 #df[['primal','dual']] = df['value'].str.split('\t', expand=True)
                 df[['value','dual']] = df['value'].str.split(expand=True)
-                print(df[['value','dual']].head())
+                #print(df[['value','dual']].head())
 
                 df[['parameter','id']] = df['temp'].str.split('(', expand=True)
                 df['parameter'] = df['parameter'].str.split(' ', expand=True)[1]

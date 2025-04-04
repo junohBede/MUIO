@@ -16,6 +16,8 @@ API/Routes/Case/__pycache__
 
 WebAPP/SOLVERs/GLPK
 WebAPP/SOLVERs/COIN-OR
+WebAPP/SOLVERs/_GLPK
+WebAPP/SOLVERs/_COIN-OR
 
 WebAPP/DataStorage/*
 !WebAPP/DataStorage/Parameters.json

@@ -251,18 +251,7 @@
                 ]
             }
         },
-        {
-            "id": "TSCM",
-            "value": "Total Storage Capacity model",
-            "name": "StorageUpperLimit",
-            "unitRule": {
-                "cat": [
-                    {
-                        "var": "StgUnit"
-                    }
-                ]
-            }
-        },
+
         {
             "id": "SVS",
             "value": "Salvage Value Storage",
