@@ -1,19 +1,30 @@
 
 <h3>OSEMOSYS ver.5.3.0, <small>20253103 release</small></h3>
 <ol style="font-style: italic; font-weight: normal;">
+    <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Deletion of case runs - bug fixed</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Export grid to xls for params groups R, RT, RE - bug fixed</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Grid paging has been removed, dynamic height of the grid introduced. Excel like behaviour - improvements to table navigation and scrolling.</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Customized preferences implemented. User can set their preferred default decimal places in results view, and units for a specific model</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Update of the case run not longer necessary. User can generate data file and Run the model</li>
     <li><kbd style="font-weight: bold; background-color:#6FB3E0">Func</kbd>&nbsp;Filtering sets in confuguration page is enabled.</li>
-    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Marginal/dual values added to the results
+    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Marginal/dual values added to the results.
         <ul><li>E8_AnnualEmissionsLimit [RYE]</li>
         <li>EBb4_EnergyBalanceEachYear4 [RYC]</li>
         <li>UDC1_UserDefinedConstraintInequality [RYCn]</li>
         <li>UDC2_UserDefinedConstraintEquality [RYCn]</li>
         </ul></li>
     <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Objective value added to the results</li>
-    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;OTotal storage capacity added to the results - postprocessing</li>
+    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;Total storage capacity added to the results - postprocessing</li>
+    <li><kbd style="font-weight: bold; background-color:#c74219">Code</kbd>&nbsp;CBC max characters of constrain name is 30. Following constraints are renamed:
+        <ul><li>SC1_LowerLimit_BeginningOfDailyTimeBracketOfFirstInstanceOfDayTypeInFirstWeekConstraint = SC1_LLBDFIFW</li>
+        <li>SC1_UpperLimit_BeginningOfDailyTimeBracketOfFirstInstanceOfDayTypeInFirstWeekConstraint = SC1_ULBDFIFW</li>
+        <li>SC2_LowerLimit_EndOfDailyTimeBracketOfLastInstanceOfDayTypeInFirstWeekConstraint = SC2_LLEDLIFW</li>
+        <li>SC2_UpperLimit_EndOfDailyTimeBracketOfLastInstanceOfDayTypeInFirstWeekConstraint = SC2_ULEDLIFW</li>
+        <li>SC3_LowerLimit_EndOfDailyTimeBracketOfLastInstanceOfDayTypeInLastWeekConstraint = SC3_LLEDLILW</li>
+        <li>SC3_UpperLimit_EndOfDailyTimeBracketOfLastInstanceOfDayTypeInLastWeekConstraint = SC3_ULEDLILW</li>
+        <li>SC4_LowerLimit_BeginningOfDailyTimeBracketOfFirstInstanceOfDayTypeInLastWeekConstraint = SC4_LLBDFILW</li>
+        <li>SC4_UpperLimit_BeginningOfDailyTimeBracketOfFirstInstanceOfDayTypeInLastWeekConstraint = SC4_ULBDFILW</li>
+        </ul></li>
 
 </ol> 
 
