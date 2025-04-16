@@ -2130,7 +2130,7 @@ class DataFile(Osemosys):
             data = {}
             year_list = self.getYears()
             tech_list = self.getTechNames()
-            start_year = year_list[0]
+            start_year = int(year_list[0])
 
             data = self.parseDataFile(data_file)
 
@@ -2206,24 +2206,44 @@ class DataFile(Osemosys):
 
                         result_cols = Config.VARIABLES_C[each].copy()
 
-                        if each in ('EBb4_EnergyBalanceEachYear4_ICR', 'E8_AnnualEmissionsLimit', 'UDC1_UserDefinedConstraintInequality', 'UDC2_UserDefinedConstraintEquality'):
+                        # if each in ('EBb4_EnergyBalanceEachYear4_ICR', 'E8_AnnualEmissionsLimit', 'UDC1_UserDefinedConstraintInequality', 'UDC2_UserDefinedConstraintEquality'):
+                        if each in Config.DUALS.keys():
                             result_cols.append('dual')
                         else:
                             result_cols.append('value')
                         #result_cols.append(each)
                         df_p = df_p[result_cols] # Reorder dataframe to include 'value' as last column
-                        print(df_p.head())
                         all_params[each] = pd.DataFrame(df_p) # Create a dataframe for each parameter
 
                         #napravi csv
-                        if each in ('EBb4_EnergyBalanceEachYear4_ICR', 'E8_AnnualEmissionsLimit', 'UDC1_UserDefinedConstraintInequality', 'UDC2_UserDefinedConstraintEquality'):
+                        #if each in ('EBb4_EnergyBalanceEachYear4_ICR', 'E8_AnnualEmissionsLimit', 'UDC1_UserDefinedConstraintInequality', 'UDC2_UserDefinedConstraintEquality'):
+                        if each in Config.DUALS.keys():
                             all_params[each] = all_params[each].rename(columns={'dual':each})
                         else:
                             all_params[each] = all_params[each].rename(columns={'value':each})
-                        all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
+                            all_params[each].to_csv(os.path.join(base_folder, 'csv', each+'.csv'), index=None)
 
                 ########################################Vars koje se izracunavaju u ovoj script nisu izlaz iz solvera###########
                 ################################################################################################################
+                #duals
+                for dual in Config.DUALS.keys():
+                    # if 'EBb4_EnergyBalanceEachYear4_ICR' in all_params:
+                    #     df_DR = pd.DataFrame(data['DiscountRate'], columns=Config.PARAMETERS_C_full['DiscountRate'])
+                    #     df_DR['DiscountRate'] = df_DR['DiscountRate'].astype(float)
+                    #     df_EB = all_params['EBb4_EnergyBalanceEachYear4_ICR']
+                    #     df_EB['y'] = df_EB['y'].astype(int)
+                    #     df_EB_d = pd.merge(df_EB, df_DR, on=['r'], how='outer')
+                    #     df_EB_d['EBb4_EnergyBalanceEachYear4_ICR'] = df_EB_d['EBb4_EnergyBalanceEachYear4_ICR'] * pow((1 + df_EB_d['DiscountRate']), df_EB_d['y'] - start_year + 0.5)
+                    #     df_EB_d.to_csv(os.path.join(base_folder, 'csv', 'EBb4_EnergyBalanceEachYear4_ICR.csv'), index=None)
+                    if dual in all_params:
+                        df_DR = pd.DataFrame(data['DiscountRate'], columns=Config.PARAMETERS_C_full['DiscountRate'])
+                        df_DR['DiscountRate'] = df_DR['DiscountRate'].astype(float)
+                        df_EB = all_params[dual]
+                        df_EB['y'] = df_EB['y'].astype(int)
+                        df_EB_d = pd.merge(df_EB, df_DR, on=['r'], how='outer')
+                        df_EB_d[dual] = df_EB_d[dual] * pow((1 + df_EB_d['DiscountRate']), df_EB_d['y'] - start_year + 0.5)
+                        df_EB_d.to_csv(os.path.join(base_folder, 'csv', dual+'.csv'), index=None)
+
                 if 'AccumulatedNewStorageCapacity' in all_params:
                     df_ANSC = all_params['AccumulatedNewStorageCapacity'].rename(columns={'value':'AccumulatedNewStorageCapacity'})
                     df_RSC = pd.DataFrame(data['ResidualStorageCapacity'], columns=Config.PARAMETERS_C_full['ResidualStorageCapacity'])
@@ -2246,7 +2266,6 @@ class DataFile(Osemosys):
                     df_TSC = df_TSC[df_TSC['TotalStorageCapacity']!=0]
                     df_TSC.to_csv(os.path.join(base_folder, 'csv', 'TotalStorageCapacity.csv'), index=None)
             
-
                 if 'RateOfActivity' in all_params:
                     #year split data frame
                     df_yearsplit = pd.DataFrame(data['YearSplit'], columns=['r','y', 'l','YearSplit'])

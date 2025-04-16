@@ -83,8 +83,7 @@ export class Model {
 
             }.bind(this);
 
-            let geteditorvalue =  function (row, cellvalue, editor) {
-                
+            let geteditorvalue =  function (row, cellvalue, editor) {           
                 return editor.val() == null ? null : editor.val();
             }
 

@@ -163,7 +163,7 @@
     "RYC": [
         {
             "id": "EB_d",
-            "value": "Energy Balance Each Year Dual",
+            "value": "Shadow price - Annual Commodity Balance",
             "name": "EBb4_EnergyBalanceEachYear4_ICR",
             "unitRule": {
                 "cat": [
@@ -177,7 +177,7 @@
     "RYE": [
         {
             "id": "AEL_d",
-            "value": "Annual Emissions Limit Dual",
+            "value": "Shadow price - Emissions Limit",
             "name": "E8_AnnualEmissionsLimit",
             "unitRule": {
                 "cat": [
@@ -191,7 +191,7 @@
     "RYCn": [
         {
             "id": "UDCI_d",
-            "value": "User Defined Constraint Inequality Dual",
+            "value": "Shadow price - UDC Inequality",
             "name": "UDC1_UserDefinedConstraintInequality",
             "unitRule": {
                 "cat": [
@@ -203,7 +203,7 @@
         },
         {
             "id": "UDCE_d",
-            "value": "User Defined Constraint Equality Dual",
+            "value": "Shadow price - UDC Equality",
             "name": "UDC2_UserDefinedConstraintEquality",
             "unitRule": {
                 "cat": [

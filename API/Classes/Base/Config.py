@@ -42,7 +42,7 @@ os.chmod(DATA_STORAGE, 0o777)
 HEROKU_DEPLOY = 0
 AWS_SYNC = 0
 
-PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis','Stg', 'Ts', 'MoO', 'UnitId', 'Se','Dt', 'Dtb')
+PINNED_COLUMNS = ('Sc', 'Tech', 'Comm', 'Emis','Stg', 'Ts', 'MoO', 'UnitId', 'Se','Dt', 'Dtb', 'paramName','TechName', 'CommName', 'EmisName', 'ConName', 'MoId')
 
 TECH_GROUPS = ('RYT', 'RYTM', 'RYTC', 'RYTCn', 'RYTCM', 'RYTE', 'RYTEM', 'RYTTs')
 COMM_GROUPS = ('RYC', 'RYTC', 'RYTCM','RYCTs')
@@ -190,6 +190,13 @@ VARIABLES_C = {
         'UDC1_UserDefinedConstraintInequality': ['r','cn','y'],
         'UDC2_UserDefinedConstraintEquality': ['r','cn','y']
     }
+
+DUALS = {
+    'EBb4_EnergyBalanceEachYear4_ICR': ['r','f','y'],
+    'E8_AnnualEmissionsLimit': ['r','e','y'],
+    'UDC1_UserDefinedConstraintInequality': ['r','cn','y'],
+    'UDC2_UserDefinedConstraintEquality': ['r','cn','y']
+}
 
 #needed for validation of inputs
 PARAMETERS_C = {

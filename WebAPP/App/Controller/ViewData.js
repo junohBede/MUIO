@@ -53,12 +53,13 @@ export default class ViewData {
         let $divGrid = $('#osy-gridViewData');
         let $divTEGrid = $('#osy-gridRT');
 
-        var daRTGrid = new $.jqx.dataAdapter(model.srcRTGrid);
-        Grid.Grid($divTEGrid, daRTGrid, model.columnsRT, false, false, false);
+        var daRTGrid = new $.jqx.dataAdapter(model.srcRTGrid, { autoBind: true });
+        console.log('daRTGrid', daRTGrid.records);
+        Grid.Grid($divTEGrid, daRTGrid, model.columnsRT, { height:200});
         Grid.applyTEviewDataFilter($divTEGrid);
 
         var daGrid = new $.jqx.dataAdapter(model.srcGrid);
-        Grid.Grid($divGrid, daGrid, model.columns, true, true, false);
+        Grid.Grid($divGrid, daGrid, model.columns,  { height:610});
         $divGrid.jqxGrid('hidecolumn', 'TechName');
         Grid.applyViewDataFilter($divGrid, model.years);
     }
@@ -380,12 +381,30 @@ export default class ViewData {
             res = !res;
         });
 
+        // $("#xlsAll").off('click');
+        // $("#xlsAll").click(function (e) {
+        //     e.preventDefault();
+        //     $divGrid.jqxGrid('exportdata', 'xls', 'View data by sets (time dependant)');
+        //     setTimeout(function(){$divTEGrid.jqxGrid('exportdata', 'xls', 'View data by sets');}, 1000)
+            
+        // });
+
         $("#xlsAll").off('click');
         $("#xlsAll").click(function (e) {
             e.preventDefault();
-            $divGrid.jqxGrid('exportdata', 'xls', 'View data by sets (time dependant)');
-            setTimeout(function(){$divTEGrid.jqxGrid('exportdata', 'xls', 'View data by sets');}, 1000)
-            
+            let rytData = $divGrid.jqxGrid('getdisplayrows');
+            let data = JSON.parse(JSON.stringify(rytData, ['Sc', 'paramName', 'UnitId', 'TechName', "CommName", "EmisName", "ConName", 'Ts', 'MoId'].concat(model.years)));
+
+            console.log('data', data);
+            Base.prepareCSV(model.casename, data)
+            .then(response =>{
+                Message.smallBoxInfo('Case study message', response.message, 3000);
+                $('#csvDownload').trigger('click');
+                window.location = $('#csvDownload').attr('href');
+            })
+            .catch(error=>{
+                Message.bigBoxDanger('Error message', error, null);
+            })
         });
 
 

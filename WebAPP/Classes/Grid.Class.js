@@ -1058,13 +1058,12 @@ export class Grid {
         });
     }
 
-    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=true, sortable= false, autoshowfiltericon=true, autoheight= false, height = $(window).height() - 275}={}) {
+    static Grid($div, daGrid, columns, {groupable = false, filterable = false, clipboard = true, editable=true, pageable=false, sortable= false, autoshowfiltericon=true, autoheight= false, height = $(window).height() - 275}={}) {
         //setting page size
         // let pagesize = JSON.parse(localStorage.getItem("osy-pagesize"));
         // if(!pagesize){
         //     pagesize = '20';
         // }
-
         //let height = $(window).height() - 255;
         $div.jqxGrid({
             theme: this.theme(),
@@ -1082,7 +1081,7 @@ export class Grid {
             filterable: filterable,
             autoshowfiltericon: autoshowfiltericon,
             sortable: sortable,
-            // pageable: pageable,
+            pageable: pageable,
             // pagesize: pagesize,
             // pagesizeoptions: ['20', '100', '250', '500', '750', '1000'],
             // pagermode: "simple",

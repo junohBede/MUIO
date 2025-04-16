@@ -7,8 +7,6 @@ export class Model {
 
         this.d = 2;
         this.decimal = 'd' + this.d;
-
-        console.log('viewData ',viewData)
         if (casename) {
 
             let datafields = [];
@@ -29,8 +27,6 @@ export class Model {
             //let mods = DataModel.Mods(genData); 
             let unitData = DataModel.getUnitData(genData, PARAMETERS);
             let paramById = DataModel.getParamById(PARAMETERS);
-
-
 
             let scClass = {};
 
@@ -115,22 +111,22 @@ export class Model {
             datafields.push({ name: 'UnitId', type: 'string' });
 
             columns.push({ text: 'ScId', datafield: 'ScId', editable: false, align: 'left', hidden: true });
-            columns.push({ text: 'SCENARIO', datafield: 'Sc', editable: false, filterable: true, align: 'left', minWidth: 55, cellclassname: cellclass });
+            columns.push({ text: 'SCENARIO', datafield: 'Sc', editable: false, filterable: true, align: 'left', minWidth: 55, cellclassname: cellclass, menu:false });
             columns.push({ text: 'GROUP', datafield: 'groupId', editable: false, align: 'left', hidden: true });
-            columns.push({ text: 'GROUP NAME', datafield: 'groupName', editable: false, filterable: true, align: 'left', hidden: true, cellclassname: cellclass });
+            columns.push({ text: 'GROUP NAME', datafield: 'groupName', editable: false, filterable: true, align: 'left', hidden: true, cellclassname: cellclass, menu:false });
             columns.push({ text: 'param', datafield: 'param', editable: false, align: 'left', hidden: true });
-            columns.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, filterable: true, align: 'left', minWidth: 75, cellclassname: cellclass });
-            columns.push({ text: 'UNIT', datafield: 'UnitId', editable: false, align: 'center', cellsalign: 'center', minWidth: 55, cellclassname: cellclass });
+            columns.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, filterable: true, align: 'left', minWidth: 75, cellclassname: cellclass, menu:false });
+            columns.push({ text: 'UNIT', datafield: 'UnitId', editable: false, align: 'center', cellsalign: 'center', minWidth: 55, cellclassname: cellclass, menu:false });
             columns.push({ text: 'TECHNOLOGY', datafield: 'TechId', editable: false, align: 'left', hidden: true });
-            columns.push({ text: 'TECHNOLOGY', datafield: 'TechName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass });
+            columns.push({ text: 'TECHNOLOGY', datafield: 'TechName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass, menu:false });
             columns.push({ text: 'COMMODITY', datafield: 'CommId', editable: false, align: 'left', hidden: true });
-            columns.push({ text: 'COMMODITY', datafield: 'CommName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass });
+            columns.push({ text: 'COMMODITY', datafield: 'CommName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass, menu:false });
             columns.push({ text: 'EMISSION', datafield: 'EmisId', editable: false, align: 'left', hidden: true });
-            columns.push({ text: 'EMISSION', datafield: 'EmisName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass });
+            columns.push({ text: 'EMISSION', datafield: 'EmisName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass, menu:false });
             columns.push({ text: 'CONSTRAINT', datafield: 'ConId', editable: false, align: 'left', hidden: true });
-            columns.push({ text: 'CONSTRAINT', datafield: 'ConName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass })
-            columns.push({ text: 'TIMESLICE', datafield: 'Ts', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass });
-            columns.push({ text: 'MoO', datafield: 'MoId', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 50, cellclassname: cellclass });
+            columns.push({ text: 'CONSTRAINT', datafield: 'ConName', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass, menu:false })
+            columns.push({ text: 'TIMESLICE', datafield: 'Ts', editable: false, filterable: true, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 55, cellclassname: cellclass, menu:false });
+            columns.push({ text: 'MoO', datafield: 'MoId', editable: false, align: 'left', cellsrenderer: cellsrendererPinned, minWidth: 50, cellclassname: cellclass, menu:false});
 
             //datafields and columns
             $.each(years, function (id, year) {
@@ -142,7 +138,7 @@ export class Model {
                     initeditor: initeditor,
                     validation: validation,
                     cellsrenderer: cellsrenderer,
-                    cellclassname: cellclass
+                    cellclassname: cellclass, menu:false
                 });
             });
 
@@ -266,19 +262,19 @@ export class Model {
             datafieldsRT.push({ name: 'UnitId', type: 'string' });
 
             columnsRT.push({ text: 'ScId', datafield: 'ScId', editable: false, align: 'left', hidden: true });
-            columnsRT.push({ text: 'SCENARIO', datafield: 'Sc', editable: false, align: 'left', cellclassname: cellclass }); // minWidth: 75, maxWidth: 150,
+            columnsRT.push({ text: 'SCENARIO', datafield: 'Sc', editable: false, align: 'left', cellclassname: cellclass, menu:false }); // minWidth: 75, maxWidth: 150,
 
             columnsRT.push({ text: 'GROUP', datafield: 'groupId', editable: false, align: 'left', hidden: true });
             columnsRT.push({ text: 'GROUP NAME', datafield: 'groupName', editable: false, align: 'left', hidden: true });
             columnsRT.push({ text: 'param', datafield: 'param', editable: false, align: 'left', hidden: true });
-            columnsRT.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, align: 'left', minWidth: 75, cellclassname: cellclass });
-            columnsRT.push({ text: 'UNIT', datafield: 'UnitId', editable: false, align: 'center', cellsalign: 'center', minWidth: 55, cellclassname: cellclass });
+            columnsRT.push({ text: 'PARAMETER NAME', datafield: 'paramName', editable: false, align: 'left', minWidth: 75, cellclassname: cellclass, menu:false });
+            columnsRT.push({ text: 'UNIT', datafield: 'UnitId', editable: false, align: 'center', cellsalign: 'center', minWidth: 55, cellclassname: cellclass, menu:false });
             columnsRT.push({
                 text: 'Value', datafield: 'value', editable: true, cellsalign: 'right', align: 'center', columntype: 'numberinput', cellsformat: 'd2', minWidth: 75,
                 initeditor: initeditorRT,
                 validation: validation,
                 cellsrenderer: cellsrenderer,
-                cellclassname: cellclass
+                cellclassname: cellclass, menu:false
             });
 
             let srcRTGrid = {
