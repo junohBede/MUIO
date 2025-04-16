@@ -1,11 +1,4 @@
-<<<<<<< HEAD
-# OSeMOSYS user interface is open source web/standalone web app for creating model solution with OSeMOSYS
-MUIO is an open source modelling system for long-run integrated assessment and energy planning.
-WebApp javascript
-API flask python 3
-=======
 # Modelling User Interface for OSeMOSYS (MUIO)
->>>>>>> c738e7c65a0f46c5824e450d6555f5b91b918dc7
 
 ![License](https://img.shields.io/github/license/OSeMOSYS/MUIO)
 ![Version](https://img.shields.io/github/v/release/OSeMOSYS/MUIO)
@@ -20,15 +13,6 @@ In development environment in folder WebAPP\SOLVERs create two folders named COI
 In COIN-OR folder unpack exactly this version of CBC binaries Cbc-2.7.5-win64-intel11.1.
 In GLPK folder unpack version glpk-4.65.
 Folder tree for CBC should look like WebAPP\SOLVERs\COIN-OR\Cbc-2.7.5-win64-intel11.1\bin
-and for GLPK WebAPP\SOLVERs\GLPK\glpk-4.65\w64.
-=======
-# Introduction
-
-Energy system modelling is essential for making well-informed decisions in energy planning. Many existing models and interfaces for comprehensive energy studies are either cost-prohibitive or require extensive programming skills, limiting accessibility. MUIO emerges as a powerful solution to these challenges, offering both open access and a user-friendly interface with a quick learning curve.
-
-Built on top of the OSeMOSYS code, MUIO enables users to construct and calibrate energy system models of basic to intermediate complexity. It allows for the representation of complete energy chains—from primary energy sources through supply systems to final demand sectors. Additionally, MUIO enhances efficiency by enabling users to run models locally and evaluate multiple scenarios simultaneously, streamlining the entire modelling process and making it more practical for a wide range of applications.
-
-# Installation
 
 1.	Download the latest version of the user interface from [here](https://forms.office.com/Pages/ResponsePage.aspx?id=wE8mz7iun0SQVILORFQISwwn5YyR7ONHs-3JdG3f5AFUODlJOEQwWTBXMlRRNFUwNEpUTUZYQ1RXOS4u). 
 2.	Move the .exe file from your download folder to a folder where you have administrator privileges. This may be for instance inside the folder: users>>name_of_the_user or any other folder you prefer. 
