@@ -5,20 +5,17 @@ Contributing
 We warmly welcome anyone interested in MUIO and the broader OSeMOSYS ecosystem! Whether you have ideas, suggestions, bug reports, or would like to contribute improvements, your input is highly valued.
 
 How You Can Contribute
-++++++++++++++++++++++
+---------------------------
 
 🧠 `Code Contributions`_
-++++++++++++++++++++++
 
 Help us enhance MUIO by adding new functionalities, fixing bugs, or optimizing model performance.
 
 📚 `Documentation`_
-++++++++++++++++++++++
 
 Support the community by expanding or refining the documentation—add new sections, correct errors, or improve clarity for new users.
 
 📂 `Examples and Use Cases`_
-++++++++++++++++++++++
 
 Share your modelling examples or country applications. These can be valuable learning tools for others in the community.
 
@@ -70,7 +67,7 @@ Examples and Use Cases
 Have you built a useful energy model using MUIO? We'd love to include it as an example to help others learn and build faster. Here's how to contribute an example to the documentation:
 
 ✅ What Makes a Good Example?
-+++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^
 
 We welcome examples that:
 
@@ -83,7 +80,7 @@ We welcome examples that:
 * Are small enough to run quickly (or include a simplified version).
 
 🚀 How to Contribute an Example
-+++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^
 
 1. Prepare your files
 
@@ -108,7 +105,7 @@ We welcome examples that:
    Submit your changes with a short description of your example.
 
 📝 Licensing and Attribution
-++++++++++++++++++++++++++++
+^^^^^^^^^^^^^^^^^^^^^^
 
 * Please include a note in your README.md indicating data sources and your preferred citation (if any).
 

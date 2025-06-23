@@ -1,5 +1,5 @@
 ###########################
-Structure of OSeMOSYS in MUIO
+Mathematical model
 ###########################
 
 As previously discussed, MUIO serves as an interface for creating and operating OSeMOSYS models. Behind the scenes, 
