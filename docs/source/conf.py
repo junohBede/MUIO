@@ -18,7 +18,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.todo',
     'sphinx.ext.viewcode',
-    'sphinx_rtd_theme',
+    'sphinx_book_theme',
 ]
 
 autosummary_generate = True
