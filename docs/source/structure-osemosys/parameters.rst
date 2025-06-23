@@ -4,19 +4,6 @@ Parameters
 
 Parameters are user-defined numerical inputs to the model. While the model structure defined by the sets typically remains fixed across scenarios, it is common practice to adjust parameter values for scenario analysis or sensitivity studies. Each parameter is associated with one or more sets. For instance, **CapitalCost[r,t,y]** indicates that capital cost varies by region (r), technology (t), and year (y). The information below provides a list and brief description of the parameters included in the version of OSeMOSYS in MUIO.
 
-**Jump to:**
-
-- `Global Parameters`_
-- `Demand Parameters`_
-- `Performance Parameters`_
-- `Costing Parameters`_
-- `Storage Parameters`_
-- `Capacity Parameters`_
-- `Activity Parameters`_
-- `UDC Parameters`_
-- `Emission Parameters`_
-
-
 Global Parameters
 -----------------
 
