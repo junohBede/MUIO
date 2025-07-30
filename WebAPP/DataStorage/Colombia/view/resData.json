@@ -1,0 +1,18 @@
+{
+    "osy-cases": [
+        {
+            "Case": "baseline",
+            "CaseId": "CS_c4meo",
+            "Desc": "",
+            "Runtime": "Wed Jul 30 2025 14:55:22 GMT-0700 (Pacific Daylight Time)",
+            "Scenarios": [
+                {
+                    "ScenarioId": "SC_0",
+                    "Scenario": "SC_0",
+                    "Desc": "Base scenario",
+                    "Active": true
+                }
+            ]
+        }
+    ]
+}

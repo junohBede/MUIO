@@ -1,0 +1,42 @@
+{
+    "TTMPA": {
+        "Test": [
+            {
+                "MIN_OIL": 13534.223,
+                "PWR_OIL": 4609.7491,
+                "MIN_NUC": 113.715,
+                "PWR_NUC": 105.0,
+                "LND_WHT_HI": 0.0,
+                "LND_WHT_HR": 307.0409,
+                "LND_SC_HI": 0.0,
+                "LND_SC_HR": 189.611,
+                "LND_SB_HI": 0.0,
+                "LND_SB_HR": 122.664,
+                "LND_TOM_HI": 0.0,
+                "LND_TOM_HR": 95.182,
+                "DEM_AGRDSL": 71.4498,
+                "DEM_PWR_SUR_WAT": 189.6236,
+                "DEM_PWR_GWT_WAT": 15.9229,
+                "DEM_PUB_GWT_WAT": 12.0,
+                "DEM_PUB_SUR_WAT": 264.0268,
+                "DEM_AGR_GWT_WAT": 0.0,
+                "DEM_AGR_SUR_WAT": 0.0,
+                "MIN_PRC": 3221.1763,
+                "LND_WAT": 630.0,
+                "LND_BLT": 1593.7789,
+                "MIN_LND": 2938.2767,
+                "MIN_HYD": 83189.295,
+                "MIN_SOL": 206974.88,
+                "MIN_WND": 11.6416,
+                "PWR_HYD": 83189.295,
+                "PWR_SOL": 206974.88,
+                "PWR_WND": 11.6416,
+                "MIN_GAS": 17793.475,
+                "MIN_COA": 0.0,
+                "PWR_GAS": 6851.5498,
+                "PWR_COA": 0.0,
+                "PWR_TRN": 94767.235
+            }
+        ]
+    }
+}
