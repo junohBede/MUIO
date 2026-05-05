@@ -2687,11 +2687,11 @@ class DataFile(Osemosys):
                                 # (možeš ovo zamijeniti čitanjem iz konfiguracije/GUI/CLI)
                                 
                                 # technology_list = ['LNDMAIIRR', 'LNDMAIRNF']  # <-- OVDJE unesite željene tehnologije
-                                technology_list = indObj.get("Sets", [])  # <-- OVDJE unesite željene tehnologije
+                                technology_list = indObj.get("Techs", [])  # <-- OVDJE unesite željene tehnologije
                                 indicatorId = indObj.get("id", "UnknownIndicator")
                                 indicatorTypeName = indObj.get("indicator_type", {}).get("name", "UnknownType")
 
-                                dfP = df_prod.copy()      # kolone: r, l, t, f, y, ProductionByTechnologyByMode
+                                dfP = df_prod.copy()      # kolone: r, l, t, f, m, y, ProductionByTechnologyByMode
                                 #dfA = df_activity.copy()  # kolone: r, l, t, m, y, RateOfActivity
 
                                 dfA = all_params['TotalAnnualTechnologyActivityByMode'].rename(columns={'value':'TotalAnnualTechnologyActivityByMode'}) # r,t,m,y
@@ -2717,7 +2717,7 @@ class DataFile(Osemosys):
 
                                     # --- 1) Agregatna proizvodnja po tehnologiji (sum preko f, m, l) ---
                                     df_prod_ann = (
-                                        dfP.groupby(['r', 'y', "f"], as_index=False)
+                                        dfP.groupby(['r', 'y','f'], as_index=False)
                                         ['ProductionByTechnologyByMode']
                                         .sum()
                                         .rename(columns={'ProductionByTechnologyByMode': 'TotalProduction'})

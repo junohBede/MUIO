@@ -1059,17 +1059,22 @@ export class Grid {
     }
 
     
-    static indicatorGrid(techs, indicators, indicatorTypes, techNames) {
+    static indicatorGrid(techs, comms, indicators, indicatorTypes, techNames, commNames) {
 
         // console.log('indicators ',indicators)
-        console.log('indicatorTypes ',indicatorTypes)
+        console.log('comms ',comms)
 
         this.srcTechs = JqxSources.srcTech(techs);
+        this.srcComms = JqxSources.srcComm(comms);
         this.srcType = JqxSources.srcIndType(indicatorTypes);
 
         console.log('this.srcType ',this.srcType)
 
         this.daTech = new $.jqx.dataAdapter(this.srcTechs, {
+            autoBind: true
+        });
+
+        this.daComm = new $.jqx.dataAdapter(this.srcComms, {
             autoBind: true
         });
 
@@ -1084,6 +1089,19 @@ export class Grid {
             let data = techs;
             editor.jqxDropDownList({
                 source: this.daTech, displayMember: 'Tech', valueMember: 'TechId', checkboxes: true,theme: this.themeMaterial,filterHeight:30,
+                renderer: function (index, label, value) {
+                    let tootltipValue = label;
+                    let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
+                    return tooltipContent
+                }
+                , filterable: true 
+            }).bind(this);
+        }.bind(this);
+
+        var ddlComms = function (row, value, editor) {
+            let data = comms;
+            editor.jqxDropDownList({
+                source: this.daComm, displayMember: 'Comm', valueMember: 'CommId', checkboxes: true,theme: this.themeMaterial,filterHeight:30,
                 renderer: function (index, label, value) {
                     let tootltipValue = label;
                     let tooltipContent = `<div data-toggle="tooltip" data-placement="top" title="${data[index]['Desc']}">${tootltipValue}</div>`;
@@ -1152,10 +1170,15 @@ export class Grid {
             var items = editor.jqxDropDownList('getItems');
             editor.jqxDropDownList('uncheckAll');
 
+            console.log('initeditor - cellvalue:', cellvalue);  
+            if (cellvalue === undefined || cellvalue === null) { return; }
+            var values = [];
+
             if (Array.isArray(cellvalue)) {
-                var values = cellvalue;
+                console.log('array')
+                values = cellvalue;
             } else {
-                var values = cellvalue.split(/,\s*/);
+                values = cellvalue.split(/,\s*/);
             }
 
             for (var j = 0; j < values.length; j++) {
@@ -1185,6 +1208,19 @@ export class Grid {
             return `<div class='jqx-grid-cell-middle-align'  style="margin-top: 8.5px;">${valueNames} </div>`;
         }.bind(this);
 
+        var cellsrendererComms = function (row, columnfield, value, defaulthtml, columnproperties) {
+            let valueNames = [];
+            if (Array.isArray(value)) {
+                var values = value;
+            } else {
+                var values = value.split(/,\s*/);
+            }
+            $.each(values, function (id, commId) {
+                valueNames.push(commNames[commId])
+            });
+            return `<div class='jqx-grid-cell-middle-align'  style="margin-top: 8.5px;">${valueNames} </div>`;
+        }.bind(this);
+
         $("#osy-gridIndicator").jqxGrid({
             width: '100%',
             autoheight: true,
@@ -1201,9 +1237,10 @@ export class Grid {
             columns: [
                 { text: 'IndicatorId', datafield: 'IndicatorId', hidden: true },
                 { text: 'Indicator name', datafield: 'Indicator', width: '15%', align: 'center', cellsalign: 'left', validation: validation_1 },
-                { text: 'Description', datafield: 'Desc', width: '25%', align: 'center', cellsalign: 'left',sortable: false, menu:false },
+                { text: 'Description', datafield: 'Desc', width: '20%', align: 'center', cellsalign: 'left',sortable: false, menu:false },
                 { text: 'Type', datafield: 'IndicatorTypeId', displayfield: 'TypeName', width: '20%', columntype: 'dropdownlist', createeditor: ddlType, align: 'center', cellsalign: 'center', sortable: false, menu:false },
-                { text: 'Sets', datafield: 'Sets', width: '30%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue, sortable: false, menu:false },
+                { text: 'Technologies', datafield: 'Techs', width: '35%', columntype: 'dropdownlist', cellsrenderer: cellsrendererTechs, createeditor: ddlTechs, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue, sortable: false, menu:false },
+                { text: 'Commodities', datafield: 'Comms', width: '20%', columntype: 'dropdownlist', cellsrenderer: cellsrendererComms, createeditor: ddlComms, align: 'center', cellsalign: 'center', initeditor: initeditor, geteditorvalue: getEditorValue, sortable: false, menu:false, hidden: true },
                 { text: '<span style="padding:10px; width:100%; border:none" id="osy-addIndicator" class="btn btn-osy" ><i class="fa fa-plus fa-lg"></i>Add indicator</span>', datafield: 'Delete', width: '10%', editable: false, cellsrenderer: cellsrendererbutton, sortable: false, menu:false },
             ]
         });

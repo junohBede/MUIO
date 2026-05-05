@@ -287,7 +287,26 @@ class ImportTemplate():
             }
         ]
         return defaultObj
+
+    def defaultIndicator(self, first=False):
+        if(first):
+            id = 'IN_0'
+        else:
+            id = self.getId('IN')
         
+        emptyArray = []
+        defaultObj = [
+            {
+                "IndicatorId": id,
+                "Indicator":id,
+                "Desc": "Default indicator",
+                "IndicatorTypeId": "PI_i",
+                "Techs": emptyArray
+            }
+        ]
+        return defaultObj
+    
+
     def defaultCase(self, first=False):
         if(first):
             id = 'CS_0'
@@ -756,9 +775,6 @@ class ImportTemplate():
                 #     tfsObj[tfs['STORAGE']].append(techId[tfs['TECHNOLOGY']])
 
 
-
-
-
             for tech in techsArray:
                 ##if 'TECHGROUP' in tech:
                 if tech['TECHNOLOGY'] not in techgroupObj:
@@ -813,6 +829,7 @@ class ImportTemplate():
             genData["osy-stg"] = stgs
             genData["osy-scenarios"] = self.defaultScenario(True)
             genData["osy-constraints"] = []
+            genData["osy-indicators"] = []
             genData["osy-years"] = yearsArray
 
             casename = genData['osy-casename']

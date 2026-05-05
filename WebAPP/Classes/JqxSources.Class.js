@@ -248,7 +248,8 @@ export class JqxSources {
                     { name: 'Desc', type: 'string' },
                     { name: 'TypeName', value: 'IndicatorTypeId', values: { source: daTypes, value: 'id', name: 'value' } },
                     { name: 'IndicatorTypeId', type: 'string' },
-                    { name: 'Sets', type: 'array' }
+                    { name: 'Techs', type: 'array' },
+                    { name: 'Comms', type: 'array' }
                 ],
         }
         return srcIndicators;

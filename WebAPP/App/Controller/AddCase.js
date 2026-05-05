@@ -85,7 +85,7 @@ export default class AddCase {
         Grid.scenarioGrid(model.scenarios);
         Grid.constraintGrid(model.techs, model.constraints, model.techNames);
 
-        Grid.indicatorGrid(model.techs, model.indicators, model.indicatorTypes, model.techNames);
+        Grid.indicatorGrid(model.techs, model.commodities, model.indicators, model.indicatorTypes, model.techNames, model.commNames);
 
         if (model.casename == null) {
             $('#osy-save').show();
@@ -1086,7 +1086,7 @@ export default class AddCase {
             event.preventDefault();
             event.stopImmediatePropagation();
             let defaultIndicator = DefaultObj.defaultIndicator();
-            model.indicators.push(JSON.parse(JSON.stringify(defaultIndicator[0], ['IndicatorId', 'Indicator', 'Desc', 'IndicatorTypeId', 'Sets'])));
+            model.indicators.push(JSON.parse(JSON.stringify(defaultIndicator[0], ['IndicatorId', 'Indicator', 'Desc', 'IndicatorTypeId', 'Techs', 'Comms'])));
             console.log('model.defaultIndicator ',defaultIndicator)
 
             $divIndicator.jqxGrid('addrow', null, defaultIndicator);
@@ -1124,9 +1124,9 @@ export default class AddCase {
             }
             console.log('column ', column)
             console.log('value ', value)
-            if (column != 'Sets' && column != 'IndicatorTypeId') {
+            if (column != 'Techs' && column != 'Comms' && column != 'IndicatorTypeId') {
                 model.indicators[rowBoundIndex][column] = value;
-            } else if (column == 'Sets') {
+            } else if (column == 'Techs' || column == 'Comms') {
                 if (value.includes(',') && value) {
                     var array = value.split(',');
                 } else if (value) {

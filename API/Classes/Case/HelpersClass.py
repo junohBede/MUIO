@@ -113,7 +113,7 @@ class Helpers:
                 continue
 
             merged = deepcopy(item)
-            merged["Sets"] = [tech_map.get(t, t) for t in merged.get("Sets", [])]
+            merged["Techs"] = [tech_map.get(t, t) for t in merged.get("Techs", [])]
             merged["group"] = type_rec["group"]
             merged["indicator_type"] = {k: v for k, v in type_rec.items() if k != "group"}
             merged["id"] = indicator_id
@@ -168,9 +168,9 @@ class Helpers:
             merged = deepcopy(item)
 
             # Mapiranje Sets: TECHid -> TechName
-            sets_ids = merged.get("Sets", [])
-            if isinstance(sets_ids, list):
-                merged["Sets"] = [tech_map.get(t, t) for t in sets_ids]
+            techs_ids = merged.get("Techs", [])
+            if isinstance(techs_ids, list):
+                merged["Techs"] = [tech_map.get(t, t) for t in techs_ids]
 
             # Root-level group
             merged["group"] = group
